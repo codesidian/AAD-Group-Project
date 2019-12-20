@@ -333,6 +333,10 @@ pip-selfcheck.json
 # Ignore all local history of files
 .history
 
+
+### VisualStudioCode Workspace ###
+*.code-workspace
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
