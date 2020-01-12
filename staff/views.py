@@ -7,5 +7,5 @@ from django.http import HttpResponse, HttpRequest, JsonResponse,HttpResponseRedi
 def home(HttpRequest):
     # Set a session variable for username, as its not changing during their time logged in.
     HttpRequest.session["username"] = HttpRequest.user.username
-
-    return render(HttpRequest,'staff/home.html')
+    context = {'title':'Staff Home'}
+    return render(HttpRequest,'staff/home.html',context)
