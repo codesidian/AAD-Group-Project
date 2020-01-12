@@ -1,0 +1,79 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<script src="https://kit.fontawesome.com/24cdc02051.js"></script>
+  <title>{% block title %} {% endblock title%}</title>
+
+</head>
+
+<body>
+
+  <div class="container-fluid p-0 h-100">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+              <a class="navbar-brand" href="#">
+    <img class="" src="{% static "logo.png" %}" alt="" width="50" height="50">
+    Spicy Stores
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Accounts <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Products</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Stock</a>
+      </li>
+    </ul>
+    <span class="">
+      
+              <div class="card" >
+                <div class="card-body">
+                  <img class="user-img" src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-512.png"
+                    class="img-round d-inline" alt="" style="float:left" width="30" height="30">
+                  <p class="d-inline" style="float:right">Welcome, {{request.session.username }}</p>
+                </div>
+              </div>
+    </span>
+  </div>
+</nav>
+
+
+
+          {% block content %}
+
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+<!--Bootstrap Loader-->
+  <div class="lds-dual-ring loader" style="display:none;" id="loader" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+
+  <!-- Optional JavaScript -->
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
+
+  {% load static %}
+
+</body>
+
+</html>

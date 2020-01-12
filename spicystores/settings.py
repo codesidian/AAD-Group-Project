@@ -24,9 +24,17 @@ SECRET_KEY = 'ay_mq2r*f29_ce!6&2wzu+rt0j)50k!d2h2ly6tkd%hj2@i26$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+LOGIN_URL = '/'
 
 ALLOWED_HOSTS = []
-
+STATIC_ROOT = "static";
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+STATICFILES_DIRS = [
+    'spicystores/static',
+]
 
 # Application definition
 
@@ -37,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'staff',
+    'store'
 ]
 
 MIDDLEWARE = [
@@ -54,7 +64,8 @@ ROOT_URLCONF = 'spicystores.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [(os.path.join(BASE_DIR, 'templates')),
+                (os.path.join(BASE_DIR, 'spicystores/templates'))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'spicystores.context_processors.base_context.setBaseContext'
+
             ],
         },
     },
