@@ -1,6 +1,7 @@
 #!/bin/sh
 if which npm > /dev/null 2> /dev/null; then
     pushd CustomerSite
+    npm i
     npm run build
     popd
 else

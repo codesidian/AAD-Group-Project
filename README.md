@@ -24,6 +24,12 @@ Install the requirements:
 
 On Linux, in order to do this you will need `python3-pip` installed.
 
+## Building the customer site
+
+Node.JS is required to build the customer site. 
+
+Run `build-customer` in a terminal in order to build.
+
 ## Running the application
 
     python manage.py runserver
