@@ -1,9 +1,10 @@
 import * as React from "react";
 import Welcome from "./Welcome";
 import ScanningScreen from "./ScanningScreen";
+import { StoresDAO } from "../data/Types";
 
 type AppProps = {
-
+    dao: StoresDAO;
 }
 
 enum Stage {
@@ -42,8 +43,10 @@ export default class App extends React.Component<AppProps, AppState> {
         switch (this.state.stage) {
             case Stage.Start:
                 const accountNumber = this.state.accountNumber;
+                const dao = this.props.dao;
                 return <Welcome
                     accountNumber={accountNumber}
+                    dao={dao}
                     onAccountNumberChange={this.handleAccountNumberChange}
                     onStart={() => this.changeStage(Stage.Scanning)}
                 />;

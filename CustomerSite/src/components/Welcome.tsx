@@ -1,9 +1,12 @@
 import * as React from "react";
 import TextField from "./TextField";
+import { StoresDAO } from "../data/Types";
+import * as Config from "../config";
 
 type WelcomeProps = {
-    onStart: () => void;
+    dao: StoresDAO;
     accountNumber: string;
+    onStart: () => void;
     onAccountNumberChange: (accountNumber: string) => void;
 }
 
@@ -22,7 +25,7 @@ export default class Welcome extends React.Component<WelcomeProps, WelcomeState>
         e.preventDefault();
 
         // TODO: version check
-        if (false) {
+        if (this.props.dao.getVersion() != Config.APP_VERSION) {
             this.setState({errors: ["Application out of date. Please refresh page."]});    
         } else {
             this.props.onStart();
@@ -35,7 +38,6 @@ export default class Welcome extends React.Component<WelcomeProps, WelcomeState>
 
         const header = <h1 className="text-center">Welcome to Spicy Stores</h1>;
         const errors = this.state.errors.map(x => <div className="alert alert-danger" role="alert">{x}</div>);
-        console.log(errors);
 
         if (this.state.isBrowserCompatible) {
             return <form>
