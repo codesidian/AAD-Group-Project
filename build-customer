@@ -1,0 +1,8 @@
+#!/bin/sh
+if which npm > /dev/null 2> /dev/null; then
+    pushd CustomerSite
+    npm run build
+    popd
+else
+    echo "Failed to find npm, please install nodejs on your system"
+fi

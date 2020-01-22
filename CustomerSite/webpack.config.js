@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
     mode: 'development',
@@ -10,7 +9,8 @@ module.exports = {
     },
     output: {
         filename: '[name].[contenthash].bundle.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '..', 'store/static/store'),
+        publicPath: '/static/store',
     },
     devtool: "source-map",
     devServer: {
@@ -38,7 +38,6 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: '!!prerender-loader?string!./src/index.html',
         }),
-        new BundleTracker({ filename: './webpack-stats.json' }),
     ],
     optimization: {
         runtimeChunk: 'single',

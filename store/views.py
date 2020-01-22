@@ -1,3 +1,4 @@
-from django.shortcuts import render
+from django.contrib.staticfiles.views import serve
 
-# Create your views here.
+def home(request):
+    return serve(request, 'store/index.html')
