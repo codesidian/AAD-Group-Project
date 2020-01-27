@@ -26,14 +26,15 @@ SECRET_KEY = 'ay_mq2r*f29_ce!6&2wzu+rt0j)50k!d2h2ly6tkd%hj2@i26$'
 DEBUG = True
 LOGIN_URL = '/'
 
-ALLOWED_HOSTS = []
-STATIC_ROOT = "static";
+ALLOWED_HOSTS = ['*']
+STATIC_ROOT = "static"
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 STATICFILES_DIRS = [
     'spicystores/static',
+    'staff/static'
 ]
 
 # Application definition
@@ -65,7 +66,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [(os.path.join(BASE_DIR, 'templates')),
-                (os.path.join(BASE_DIR, 'spicystores/templates'))],
+                (os.path.join(BASE_DIR, 'spicystores/templates')),
+                (os.path.join(BASE_DIR, 'staff/templates'))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

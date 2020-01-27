@@ -1,0 +1,65 @@
+{% extends "staff.html" %}
+{% load static %}
+{% block title %}{{title}}{% endblock title %}}
+{% block page %}
+  <b-button-toolbar class="d-flex flex-row-reverse m-2">
+    <b-button-group>
+      <b-button variant="primary" @click="filterProductsList()">
+        <span class="mdi mdi-filter"></span>
+        Filter
+      </b-button>
+    </b-button-group>
+  </b-button-toolbar>
+  <b-table
+    striped
+    responsive
+    hover
+    :fields="saleFields"
+    :items="sales"
+    :primary-key="'id'"
+  >
+    <!-- Format datetime -->
+    <template v-slot:cell(datetime)="data">
+      [[ moment(data.value).format(dateTimeStringFormat) ]]
+    </template>
+    <!-- Format total integer as currency -->
+    <template v-slot:cell(total)="data">
+      [[ formatAsCurrency(data.value) ]]
+    </template>
+    <!-- Display number of items -->
+    <template v-slot:cell(number_of_items)="data">
+      [[ saleNumberOfItems(data) ]]
+    </template>
+    <!-- View button per item -->
+    <template v-slot:cell(show_items)="row">
+      <b-button size="sm" @click="row.toggleDetails" class="mr-2" variant="primary">
+        <span class="mdi mdi-eye"></span>
+        [[ row.detailsShowing ? 'Hide' : 'Show' ]] Items
+      </b-button>
+    </template>
+    <!-- Row details -->
+    <template v-slot:row-details="row">
+      <b-table
+        striped
+        responsive
+        hover
+        :fields="saleItemsFields"
+        :items="row.item.items"
+        :primary-key="'id'"
+      >
+        <!-- Format price integer as currency -->
+        <template v-slot:cell(price_at_sale)="data">
+          [[ formatAsCurrency(data.value) ]]
+        </template>
+        <!-- Edit button per item -->
+        <template v-slot:cell(refund)="row">
+          <b-button size="sm" @click="refundSaleItem(row.item.id)" class="mr-2" variant="primary">
+            <span class="mdi mdi-currency-gbp"></span>
+            Refund
+          </b-button>
+        </template>
+      </b-table
+      >
+    </template>
+  </b-table>
+{% endblock page %}
