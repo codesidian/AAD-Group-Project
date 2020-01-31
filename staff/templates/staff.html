@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.2.2/dist/bootstrap-vue.min.css"
+    integrity="sha256-BQExbNCY9XfpMxIDtbF2wLTOByjL9Hwdb37ZQX/xHlU="
+    crossorigin="anonymous"
+  >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/4.8.95/css/materialdesignicons.min.css"
+    integrity="sha256-jO/moMNzM6DGEeJJj1uKQi6owdTw3cgIPs0Moo6N1X8="
+    crossorigin="anonymous"
+  >
+  <script
+    src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"
+    crossorigin="anonymous"
+  >
+  </script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"
+    integrity="sha256-ngFW3UnAN0Tnm76mDuu7uUtYEcG3G5H1+zioJw3t+68="
+    crossorigin="anonymous"
+  >
+  </script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.2.2/dist/bootstrap-vue.min.js"
+    integrity="sha256-kGiCnEPGrBPklSXJb5j8wS9W02OvXSpUxDTkCeqxf0E="
+    crossorigin="anonymous"
+  >
+  </script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
+    integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ="
+    crossorigin="anonymous"
+  >
+  </script>
+  <style type="text/css">
+    .notificationsCountBadge {
+      margin-top: -0.25em;
+      right: 0.25em;
+      transform: scale(0.8);
+      position: absolute;
+      transform-origin: top right;
+    }
+  </style>
+{% endblock head %}
+{% block content %}
+  <div id="app">
+    <b-navbar toggleable="lg" type="dark" variant="primary" sticky>
+      <b-navbar-brand
+        :active="isActive('{% url 'staffmodule-home' %}')"
+        :disabled="isActive('{% url 'staffmodule-home' %}')"
+        href="{% url 'staffmodule-home' %}"
+      >
+        Spicy Stores
+      </b-navbar-brand>
+      <b-navbar-toggle target="nav-collapse">
+        <span class="navbar-toggler-icon"></span>
+        <b-badge v-if="notificationsCount > 0" pill variant="danger" class="notificationsCountBadge">[[ notificationsCount ]]</b-badge>
+      </b-navbar-toggle>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav>
+          <b-nav-item
+            :active="isActive('{% url 'staffmodule-home' %}')"
+            :disabled="isActive('{% url 'staffmodule-home' %}')"
+            href="{% url 'staffmodule-home' %}"
+          >
+            Dashboard
+          </b-nav-item>
+          <b-nav-item
+            :active="isActive('{% url 'staffmodule-products' %}')"
+            :disabled="isActive('{% url 'staffmodule-products' %}')"
+            href="{% url 'staffmodule-products' %}"
+          >
+            Products
+          </b-nav-item>
+          <b-nav-item
+            :active="isActive('{% url 'staffmodule-reports' %}')"
+            :disabled="isActive('{% url 'staffmodule-reports' %}')"
+            href="{% url 'staffmodule-reports' %}"
+          >
+            Reports
+          </b-nav-item>
+          <b-nav-item
+            :active="isActive('{% url 'staffmodule-sales' %}')"
+            :disabled="isActive('{% url 'staffmodule-sales' %}')"
+            href="{% url 'staffmodule-sales' %}"
+          >
+            Sales
+          </b-nav-item>
+          <b-nav-item
+            :active="isActive('{% url 'staffmodule-intelligence' %}')"
+            :disabled="isActive('{% url 'staffmodule-intelligence' %}')"
+            href="{% url 'staffmodule-intelligence' %}"
+          >
+            Intelligence
+          </b-nav-item>
+          <b-nav-item
+            :active="isActive('{% url 'staffmodule-admin' %}')"
+            :disabled="isActive('{% url 'staffmodule-admin' %}')"
+            href="{% url 'staffmodule-admin' %}"
+          >
+            Admin
+          </b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item-dropdown right>
+            <template v-slot:button-content>
+              <span class="mdi mdi-bell"></span>
+              <span>
+                Notifications
+                <b-badge v-if="notificationsCount > 0" pill variant="danger">[[ notificationsCount ]]</b-badge>
+              </span>
+            </template>
+            <span v-for="(notification, index) in notifications">
+              <b-dropdown-item :href="notification.link">
+                [[ notification.text ]]
+              </b-dropdown-item>
+              <b-dropdown-divider v-if="index < notificationsCount-1"></b-dropdown-divider>
+            </span>
+          </b-nav-item-dropdown>
+          <b-nav-item-dropdown right>
+            <!-- Using 'button-content' slot -->
+            <template v-slot:button-content>
+              <em>User</em>
+            </template>
+            <b-dropdown-item href="#">Profile</b-dropdown-item>
+            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+    {% block page %}{% endblock page %}
+  </div>
+  <script>
+    Vue.config.devtools = true
+    var app = new Vue({
+      el: '#app',
+      computed: {
+        notificationsCount: function () {
+          return this.notifications.length
+        }
+      },
+      data: {
+        dateTimeStringFormat: 'Do MMM YYYY, HH:MM:SS',
+        lowStockProducts: [
+          { id: 3, name: 'Isopropyl Alcohol', quantity: 9, warning_quantity: 10 },
+          { id: 4, name: 'Kingston 16GB SD Card', quantity: 23, warning_quantity: 30 }
+        ],
+        notifications: [
+          { id: 1, text: 'A new finance report is ready', link: 'reports' },
+          { id: 2, text: 'A new stock report is ready', link: 'reports' },
+          { id: 3, text: 'A new order request is ready', link: 'reports' }
+        ],
+        numSalesToday: 12,
+        numSalesYesterday: 22,
+        productFields: [
+          { key: 'code', sortable: true },
+          { key: 'name', sortable: true },
+          { key: 'price', sortable: true },
+          { key: 'quantity', sortable: true },
+          { key: 'warning_quantity', sortable: true },
+          { key: 'is_chemical', sortable: true },
+          { key: 'pack_size', sortable: true },
+          { key: 'on_sale', sortable: true },
+          { key: 'edit' }
+        ],
+        products: [
+          { id: 1, code: 'ST01', name: 'HB Pencil', price: 20, quantity: 100, warning_quantity: 15, is_chemical: false, pack_size: 20, on_sale: true },
+          { id: 2, code: 'ST02', name: 'Black Ballpoint Pen', price: 30, quantity: 136, warning_quantity: 30, is_chemical: false, pack_size: 10, on_sale: true },
+          { id: 3, code: 'CH01', name: 'Isopropyl Alcohol', price: 200, quantity: 9, warning_quantity: 10, is_chemical: true, pack_size: 20, on_sale: true },
+          { id: 4, code: 'EL01', name: 'Kingston 16GB SD Card', price: 899, quantity: 23, warning_quantity: 30, is_chemical: false, pack_size: 1, on_sale: true }
+        ],
+        reports: [
+          { id: 4, type: 'stock', datetime: '2020-01-24T15:32:00+0000' },
+          { id: 3, type: 'finance', datetime: '2020-01-24T00:00:00+0000' },
+          { id: 2, type: 'finance', datetime: '2020-01-22T00:00:00+0000' },
+          { id: 1, type: 'stock', datetime: '2020-01-21T11:05:00+0000' }
+        ],
+        saleFields: [
+          { key: 'id', sortable: true, label: 'No.' },
+          { key: 'datetime', sortable: true },
+          { key: 'customer_id', sortable: true, label: 'Customer ID' },
+          { key: 'total', sortable: true },
+          { key: 'number_of_items', label: 'No. of Items' },
+          { key: 'show_items', label: '' }
+        ],
+        saleItemsFields: [
+          { key: 'code' },
+          { key: 'name' },
+          { key: 'quantity' },
+          { key: 'price_at_sale' },
+          { key: 'refund', label: '' }
+        ],
+        sales: [
+          { id: 1, datetime: '2020-01-24T11:06:00+0000', customer_id: 'nigel.king', total: 2000, items: [
+            { code: 'CH01', name: 'Isopropyl Alcohol', quantity: 10, price_at_sale: 200 }
+          ]},
+        ],
+        selectedEditProductId: 0,
+        selectedEditProductCode: '',
+        selectedEditProductName: '',
+        selectedEditProductPrice: '',
+        selectedEditProductWarningQuantity: '',
+        selectedEditProductIsChemical: '',
+        selectedEditProductPackSize: '',
+        selectedEditProductOnSale: '',
+      },
+      methods: {
+        editProduct(id) {
+          this.selectedEditProduct = id
+          this.selectedEditProductCode = this.products[id-1].code
+          this.selectedEditProductName = this.products[id-1].name
+          this.selectedEditProductPrice = this.products[id-1].price
+          this.selectedEditProductWarningQuantity = this.products[id-1].warning_quantity
+          this.selectedEditProductIsChemical = this.products[id-1].is_chemical
+          this.selectedEditProductPackSize = this.products[id-1].pack_size
+          this.selectedEditProductOnSale = this.products[id-1].on_sale
+          this.$bvModal.show('bv-modal-product')
+        },
+
+        isActive(url) {
+          return url == window.location.pathname
+        },
+
+        filterProductsList() {
+          this.$bvModal.show('bv-modal-filter-products-list')
+        },
+
+        addNewProduct() {
+          this.$bvModal.show('bv-modal-add-new-product')
+        },
+
+        saleNumberOfItems(col) {
+          var items = this.sales[col.index].items
+          var numOfItems = 0
+          items.forEach(item => {
+            numOfItems += item.quantity
+          });
+          return numOfItems
+        },
+
+        formatAsCurrency(val) {
+          return '£' + (val/100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+        },
+
+        refundSaleItem(id) {
+          this.issueRefund = ''
+          this.$bvModal.msgBoxConfirm('Are you sure you want to issue a refund for this item?', {
+            title: 'Refund',
+            size: 'sm',
+            okVariant: 'danger',
+            okTitle: 'Yes',
+            cancelTitle: 'No',
+            footerClass: 'p-2',
+            hideHeaderClose: true,
+            centered: true
+          })
+            .then(value => {
+              this.issueRefund = value
+            })
+            .catch(err => {
+              // An error occurred
+            })
+        }
+      },
+      delimiters: ['[[',']]']
+    })
+  </script>
+{% endblock content %}

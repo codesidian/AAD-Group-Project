@@ -1,7 +1,41 @@
-{% extends "base.html" %}
-{% block title%}
-{{title}}
-{% endblock title%}
-{% block content %}
- staff home {{test_context_var}}
-{% endblock content %}
+{% extends "staff.html" %}
+{% load static %}
+{% block title %}{{title}}{% endblock title %}}
+{% block page %}
+  <b-container fluid>
+    <b-row class="my-3">
+      <b-col class="mb-lg-0 mb-3 col-lg-7 col-12">
+        <b-card header="Low Stock Products" header-bg-variant="light">
+          <div class="mb-3" v-for="product in lowStockProducts">
+            <h6>[[ product.name ]]:</h6><b-progress show-progress :value="product.quantity" variant="warning"></b-progress>
+          </div>
+        </b-card>
+      </b-col>
+      <b-col>
+        <b-card header="Sales" header-bg-variant="light">
+          <b-list-group flush>
+            <b-list-group-item>[[ numSalesToday ]] sales so far today</b-list-group-item>
+            <b-list-group-item>[[ numSalesYesterday ]] sales yesterday</b-list-group-item>
+          </b-list-group>
+        </b-card>
+      </b-col>
+    </b-row>
+    <b-row class="mb-3">
+      <b-col class="mb-lg-0 mb-3 col-lg-6 col-12">
+        <b-card header="Reports" header-bg-variant="light">
+          <b-list-group flush>
+            <b-list-group-item>Latest finance report</b-list-group-item>
+            <b-list-group-item>Latest stock report</b-list-group-item>
+          </b-list-group>
+        </b-card>
+      </b-col>
+      <b-col>
+        <b-card header="Intelligence" header-bg-variant="light">
+          <b-list-group flush>
+            <b-list-group-item>10 items expected to reach low stock levels next week</b-list-group-item>
+          </b-list-group>
+        </b-card>
+      </b-col>
+    </b-row>
+  </b-container>
+{% endblock page %}

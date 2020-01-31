@@ -1,0 +1,18 @@
+{% extends "staff.html" %}
+{% load static %}
+{% block title %}{{title}}{% endblock title %}}
+{% block page %}
+  <b-list-group flush>
+    <b-list-group-item v-for="report in reports">
+      <span v-if="report.type == 'stock'">
+        <span class="mdi mdi-file-chart-outline"></span>
+        Stock report,&nbsp;
+      </span>
+      <span v-if="report.type == 'finance'">
+        <span class="mdi mdi-file-percent-outline"></span>
+        Finance report,&nbsp;
+      </span>
+      [[ moment(report.datetime).format(dateTimeStringFormat) ]]
+    </b-list-group-item>
+  </b-list-group>
+{% endblock page %}

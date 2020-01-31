@@ -1,0 +1,90 @@
+{% extends "staff.html" %}
+{% load static %}
+{% block title %}{{title}}{% endblock title %}}
+{% block page %}
+  <b-button-toolbar class="d-flex flex-row-reverse m-2">
+    <b-button-group>
+      <b-button variant="primary" @click="addNewProduct()">
+        <span class="mdi mdi-plus-thick"></span>
+        Add New Product
+      </b-button>
+      <b-button variant="primary" @click="filterProductsList()">
+        <span class="mdi mdi-filter"></span>
+        Filter
+      </b-button>
+    </b-button-group>
+  </b-button-toolbar>
+  <b-table
+    striped
+    responsive
+    hover
+    :fields="productFields"
+    :items="products"
+    :primary-key="'id'"
+  >
+    <!-- Format price integer as currency -->
+    <template v-slot:cell(price)="data">
+      [[ formatAsCurrency(data.value) ]]
+    </template>
+    <!-- Format is_chemical as tick/cross -->
+    <template v-slot:cell(is_chemical)="data">
+      <span v-if="data.value" class="mdi mdi-check"></span>
+      <span v-if="!data.value" class="mdi mdi-close"></span>
+    </template>
+    <!-- Format on_sale as tick/cross -->
+    <template v-slot:cell(on_sale)="data">
+      <span v-if="data.value" class="mdi mdi-check"></span>
+      <span v-if="!data.value" class="mdi mdi-close"></span>
+    </template>
+    <!-- Edit button per item -->
+    <template v-slot:cell(edit)="row">
+      <b-button size="sm" @click="editProduct(row.item.id)" class="mr-2" variant="primary">
+        <span class="mdi mdi-pencil"></span>
+        Edit
+      </b-button>
+    </template>
+  </b-table>
+
+  <b-modal
+    id="bv-modal-product"
+    centered
+    :header-bg-variant="'primary'"
+    :header-text-variant="'light'"
+  >
+    <template v-slot:modal-title>
+      Edit Product
+    </template>
+    <div class="d-block text-center">
+      <div>Name: [[ selectedEditProductName ]]</div>
+      <div>Price (in pence): [[ selectedEditProductPrice ]]</div>
+      <div>Warning Quantity: [[ selectedEditProductWarningQuantity ]]</div>
+      <div>Is Chemical: [[ selectedEditProductIsChemical ]]</div>
+      <div>Pack Size: [[ selectedEditProductPackSize ]]</div>
+      <div>On Sale: [[ selectedEditProductOnSale ]]</div>
+    </div>
+  </b-modal>
+
+  <b-modal
+    id="bv-modal-add-new-product"
+    centered
+    :header-bg-variant="'primary'"
+    :header-text-variant="'light'"
+  >
+    <template v-slot:modal-title>Add New Product</template>
+    <div class="d-block text-center">
+
+    </div>
+  </b-modal>
+
+  <b-modal
+    id="bv-modal-filter-products-list"
+    centered
+    :header-bg-variant="'primary'"
+    :header-text-variant="'light'"
+  >
+    <template v-slot:modal-title>Filter Products List</template>
+    <div class="d-block text-center">
+
+    </div>
+  </b-modal>
+{% endblock page %}
