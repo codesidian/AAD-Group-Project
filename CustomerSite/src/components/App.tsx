@@ -17,13 +17,11 @@ enum Stage {
 
 type AppState = {
     stage: Stage;
-    accountNumber: string;
 }
 
 export default class App extends React.Component<AppProps, AppState> {
     state = {
         stage: Stage.Start,
-        accountNumber: ''
     }
 
     changeStage = (newStage: Stage) => {
@@ -33,21 +31,12 @@ export default class App extends React.Component<AppProps, AppState> {
         });
     }
 
-    handleAccountNumberChange = (accountNumber: string) => {
-        this.setState({
-            accountNumber: accountNumber
-        });
-    }
-
     render() {
         switch (this.state.stage) {
             case Stage.Start:
-                const accountNumber = this.state.accountNumber;
                 const dao = this.props.dao;
                 return <Welcome
-                    accountNumber={accountNumber}
                     dao={dao}
-                    onAccountNumberChange={this.handleAccountNumberChange}
                     onStart={() => this.changeStage(Stage.Scanning)}
                 />;
             case Stage.Scanning:

@@ -5,9 +5,7 @@ import * as Config from "../config";
 
 type WelcomeProps = {
     dao: StoresDAO;
-    accountNumber: string;
     onStart: () => void;
-    onAccountNumberChange: (accountNumber: string) => void;
 }
 
 type WelcomeState = {
@@ -33,9 +31,6 @@ export default class Welcome extends React.Component<WelcomeProps, WelcomeState>
     }
 
     render() {
-        const accountNumber = this.props.accountNumber;
-        const onAccountNumberChange = this.props.onAccountNumberChange;
-
         const header = <h1 className="text-center">Welcome to Spicy Stores</h1>;
         const errors = this.state.errors.map(x => <div className="alert alert-danger" role="alert">{x}</div>);
 
@@ -43,7 +38,6 @@ export default class Welcome extends React.Component<WelcomeProps, WelcomeState>
             return <form>
                 {header}
                 {errors}
-                <TextField label="Account number" text={accountNumber} onTextChange={onAccountNumberChange} />
                 <input onClick={this.clickStart} className="btn btn-primary" type="submit" value="Start" />
             </form>;
         } else {
