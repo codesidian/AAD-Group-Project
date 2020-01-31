@@ -24,6 +24,15 @@ Install the requirements:
 
 On Linux, in order to do this you will need `python3-pip` installed.
 
+Set up the database:
+
+    python manage.py makemigrations
+    python manage.py migrate
+
+Create a superuser:
+
+    python manage.py createsuperuser
+
 ## Building the customer site
 
 Node.JS is required to build the customer site. 
