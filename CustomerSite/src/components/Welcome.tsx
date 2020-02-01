@@ -19,11 +19,11 @@ export default class Welcome extends React.Component<WelcomeProps, WelcomeState>
         errors: []
     }
 
-    clickStart = (e: React.MouseEvent) => {
+    clickStart = async (e: React.MouseEvent) => {
         e.preventDefault();
 
         // TODO: version check
-        if (this.props.dao.getVersion() != Config.APP_VERSION) {
+        if (await this.props.dao.getVersion() != Config.APP_VERSION) {
             this.setState({errors: ["Application out of date. Please refresh page."]});    
         } else {
             this.props.onStart();
@@ -38,7 +38,7 @@ export default class Welcome extends React.Component<WelcomeProps, WelcomeState>
             return <form>
                 {header}
                 {errors}
-                <input onClick={this.clickStart} className="btn btn-primary" type="submit" value="Start" />
+                <input onClick={this.clickStart} className="btn btn-primary" type="submit" value="Start" style={{width: "100%"}} />
             </form>;
         } else {
             return <div>
