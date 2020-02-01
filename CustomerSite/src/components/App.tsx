@@ -32,15 +32,17 @@ export default class App extends React.Component<AppProps, AppState> {
     }
 
     render() {
+        const dao = this.props.dao;
         switch (this.state.stage) {
             case Stage.Start:
-                const dao = this.props.dao;
                 return <Welcome
                     dao={dao}
                     onStart={() => this.changeStage(Stage.Scanning)}
                 />;
             case Stage.Scanning:
-                return <ScanningScreen />;
+                return <ScanningScreen
+                    dao={dao}
+                />;
             default:
                 return <div>
                     <div>Roses are red</div>

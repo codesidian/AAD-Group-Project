@@ -16,7 +16,8 @@ export default class TestDAO implements Types.StoresDAO {
             if (item === undefined) {
                 rej("Invalid item")
             } else {
-                res(item);
+                //res(item);
+                setTimeout(() => res(item), 500);
             }
         });
     }
