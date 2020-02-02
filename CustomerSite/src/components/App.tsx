@@ -5,6 +5,7 @@ import { StoresDAO } from "../data/Types";
 import Cart from "../data/Cart";
 import ObservableCart from "../data/ObservableCart";
 import MemoryCart from "../data/MemoryCart";
+import OverviewScreen from "./OverviewScreen";
 
 type AppProps = {
     dao: StoresDAO;
@@ -53,6 +54,14 @@ export default class App extends React.Component<AppProps, AppState> {
                 return <ScanningScreen
                     dao={dao}
                     cart={cart}
+                    onNext={() => this.changeStage(Stage.Overview)}
+                />;
+            case Stage.Overview:
+                return <OverviewScreen
+                    dao={dao}
+                    cart={cart}
+                    onNext={() => this.changeStage(Stage.Purchasing)}
+                    onBack={() => this.changeStage(Stage.Scanning)}
                 />;
             default:
                 return <div>
