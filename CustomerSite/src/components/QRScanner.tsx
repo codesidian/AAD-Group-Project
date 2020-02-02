@@ -26,6 +26,9 @@ export default class QRScanner extends React.Component<QRScannerProps, QRScanner
         const stream = this.state.stream;
         
         if (!this.state.running) {
+            if (stream !== undefined) {
+                stream.getTracks().forEach(x => x.stop());
+            }
             return;
         }
 
