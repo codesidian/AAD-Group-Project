@@ -4,9 +4,12 @@ import PressToScan from "./PressToScan";
 import { StoresDAO } from "../data/Types";
 import TestDAO from "../data/TestDAO";
 import Spinner from "./Spinner";
+import Cart from "../data/Cart";
+import ProductTable from "./ProductsTable";
 
 type ScanningScreenProps = {
     dao: StoresDAO;
+    cart: Cart;
 }
 
 enum State {
@@ -43,7 +46,7 @@ export default class ScanningScreen extends React.Component<ScanningScreenProps,
 
         try {
             let item = await this.props.dao.getItem(code);
-            alert(item.name);
+            this.props.cart.addItem(item);
         } catch (error) {
             alert(error);
         }
@@ -66,6 +69,7 @@ export default class ScanningScreen extends React.Component<ScanningScreenProps,
         })();
         return <div>
             {currentScreen}
+            <ProductTable cart={this.props.cart} editable={true} />
         </div>;
     }
 }

@@ -1,7 +1,7 @@
 import Cart from "./Cart";
 import { Item, SaleItem } from "./Types";
 
-export type CartObserver = (updated: Cart) => void;
+export type CartObserver = (updated: ObservableCart) => void;
 
 export default class ObservableCart implements Cart {
     observers = new Array<CartObserver | undefined>();

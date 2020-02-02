@@ -2,6 +2,9 @@ import * as React from "react";
 import Welcome from "./Welcome";
 import ScanningScreen from "./ScanningScreen";
 import { StoresDAO } from "../data/Types";
+import Cart from "../data/Cart";
+import ObservableCart from "../data/ObservableCart";
+import MemoryCart from "../data/MemoryCart";
 
 type AppProps = {
     dao: StoresDAO;
@@ -17,11 +20,13 @@ enum Stage {
 
 type AppState = {
     stage: Stage;
+    cart: ObservableCart;
 }
 
 export default class App extends React.Component<AppProps, AppState> {
-    state = {
+    state: AppState = {
         stage: Stage.Start,
+        cart: new ObservableCart(new MemoryCart()),
     }
 
     changeStage = (newStage: Stage) => {
@@ -31,8 +36,13 @@ export default class App extends React.Component<AppProps, AppState> {
         });
     }
 
+    cartUpdated = (cart: ObservableCart) => {
+        this.setState({ cart: cart });
+    }
+
     render() {
         const dao = this.props.dao;
+        const cart = this.state.cart;
         switch (this.state.stage) {
             case Stage.Start:
                 return <Welcome
@@ -42,6 +52,7 @@ export default class App extends React.Component<AppProps, AppState> {
             case Stage.Scanning:
                 return <ScanningScreen
                     dao={dao}
+                    cart={cart}
                 />;
             default:
                 return <div>
@@ -51,5 +62,9 @@ export default class App extends React.Component<AppProps, AppState> {
                     <div>Please refresh page</div>
                 </div>;
         }
+    }
+
+    componentDidMount() {
+        this.state.cart.addObserver(this.cartUpdated);
     }
 }
