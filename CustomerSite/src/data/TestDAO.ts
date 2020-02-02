@@ -3,6 +3,8 @@ import * as Config from "../config";
 
 const items: Map<string, Types.Item> = new Map<string, Types.Item>([
     ["ethanol", {code: "ethanol", name:"Ethanol", price:100, quantity: 1, is_chemical: true, pack_size: 1, for_sale: true}],
+    ["pencil", {code: "pencil", name:"Pencil", price:10, quantity: 1, is_chemical: false, pack_size: 1, for_sale: true}],
+    ["pen", {code: "pen", name:"Pen", price:25, quantity: 1, is_chemical: false, pack_size: 1, for_sale: true}],
 ]);
 
 export default class TestDAO implements Types.StoresDAO {
