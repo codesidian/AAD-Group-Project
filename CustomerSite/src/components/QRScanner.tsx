@@ -21,7 +21,7 @@ export default class QRScanner extends React.Component<QRScannerProps, QRScanner
         return <video id="qrscan" style={{width: "100%", maxWidth: "360px"}} autoPlay></video>;
     }
 
-    onRequestAnimationFrame = (timestep : DOMHighResTimeStamp) => {
+    onRequestAnimationFrame = () => {
         const canvas = this.state.scanningCanvas;
         const stream = this.state.stream;
         
@@ -36,7 +36,7 @@ export default class QRScanner extends React.Component<QRScannerProps, QRScanner
         const video = document.getElementById("qrscan") as HTMLVideoElement | null;
 
         if (video === null) {
-            requestAnimationFrame(this.onRequestAnimationFrame);
+            setTimeout(this.onRequestAnimationFrame, 500);
             return;
         }
 
@@ -59,14 +59,14 @@ export default class QRScanner extends React.Component<QRScannerProps, QRScanner
             }
         }
         
-        requestAnimationFrame(this.onRequestAnimationFrame);
+        setTimeout(this.onRequestAnimationFrame, 500);
     }
 
     async componentDidMount() {
         this.setState({
             stream: await navigator.mediaDevices.getUserMedia({video: {width: 360, aspectRatio: 0.5625, facingMode: 'environment'}})
         });
-        requestAnimationFrame(this.onRequestAnimationFrame);
+        setTimeout(this.onRequestAnimationFrame, 500);
     }
 
     componentWillUnmount() {
