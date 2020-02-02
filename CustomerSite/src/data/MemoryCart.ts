@@ -28,4 +28,8 @@ export default class MemoryCart implements Cart {
             saleItem.quantity = quantity;
         }
     }
+
+    clear(): void {
+        this.items = new Array<SaleItem>();
+    }
 }

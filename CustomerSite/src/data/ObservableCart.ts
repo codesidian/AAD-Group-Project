@@ -23,6 +23,11 @@ export default class ObservableCart implements Cart {
         this.invokeObservers();
     }
 
+    clear(): void {
+        this.backingCart.clear();
+        this.invokeObservers();
+    }
+
     invokeObservers() {
         this.observers.forEach(observer => {
             if (observer !== undefined) {
