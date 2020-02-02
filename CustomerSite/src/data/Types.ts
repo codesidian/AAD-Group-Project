@@ -1,20 +1,25 @@
 export interface StoresDAO {
-    getVersion(): string;
-    getItem(itemCode:string): Item | undefined;
+    getVersion(): Promise<string>;
+    getItem(itemCode:string): Promise<Item>;
 };
 
 export type Item = {
-    itemCode: string;
+    code: string;
     name: string;
     price: number;
     quantity: number;
-    isChemical: boolean;
-    packSize: number;
-    forSale: boolean;
+    is_chemical: boolean;
+    pack_size: number;
+    for_sale: boolean;
+};
+
+export type SaleItem = {
+    item: Item;
+    quantity: number;
 };
 
 export function isItem(obj: any): obj is Item {
     let item = obj as Item;
-    return item.itemCode !== undefined && item.name != undefined;
+    return item.code !== undefined && item.name != undefined;
 }
 

@@ -2,6 +2,10 @@ import * as React from "react";
 import Welcome from "./Welcome";
 import ScanningScreen from "./ScanningScreen";
 import { StoresDAO } from "../data/Types";
+import Cart from "../data/Cart";
+import ObservableCart from "../data/ObservableCart";
+import MemoryCart from "../data/MemoryCart";
+import OverviewScreen from "./OverviewScreen";
 
 type AppProps = {
     dao: StoresDAO;
@@ -17,13 +21,13 @@ enum Stage {
 
 type AppState = {
     stage: Stage;
-    accountNumber: string;
+    cart: ObservableCart;
 }
 
 export default class App extends React.Component<AppProps, AppState> {
-    state = {
+    state: AppState = {
         stage: Stage.Start,
-        accountNumber: ''
+        cart: new ObservableCart(new MemoryCart()),
     }
 
     changeStage = (newStage: Stage) => {
@@ -33,25 +37,32 @@ export default class App extends React.Component<AppProps, AppState> {
         });
     }
 
-    handleAccountNumberChange = (accountNumber: string) => {
-        this.setState({
-            accountNumber: accountNumber
-        });
+    cartUpdated = (cart: ObservableCart) => {
+        this.setState({ cart: cart });
     }
 
     render() {
+        const dao = this.props.dao;
+        const cart = this.state.cart;
         switch (this.state.stage) {
             case Stage.Start:
-                const accountNumber = this.state.accountNumber;
-                const dao = this.props.dao;
                 return <Welcome
-                    accountNumber={accountNumber}
                     dao={dao}
-                    onAccountNumberChange={this.handleAccountNumberChange}
                     onStart={() => this.changeStage(Stage.Scanning)}
                 />;
             case Stage.Scanning:
-                return <ScanningScreen />;
+                return <ScanningScreen
+                    dao={dao}
+                    cart={cart}
+                    onNext={() => this.changeStage(Stage.Overview)}
+                />;
+            case Stage.Overview:
+                return <OverviewScreen
+                    dao={dao}
+                    cart={cart}
+                    onNext={() => this.changeStage(Stage.Purchasing)}
+                    onBack={() => this.changeStage(Stage.Scanning)}
+                />;
             default:
                 return <div>
                     <div>Roses are red</div>
@@ -60,5 +71,9 @@ export default class App extends React.Component<AppProps, AppState> {
                     <div>Please refresh page</div>
                 </div>;
         }
+    }
+
+    componentDidMount() {
+        this.state.cart.addObserver(this.cartUpdated);
     }
 }
