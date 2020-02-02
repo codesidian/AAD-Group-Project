@@ -25,7 +25,7 @@ export default class OverviewScreen extends React.Component<OverviewScreenProps>
             <div>Total price: £{(totalPrice / 100).toFixed(2)}</div>
             <div className="btn-group" role="group" style={{width: "100%"}}>
                 <button className="btn btn-secondary" onClick={this.props.onBack}>Back</button>
-                <button className="btn btn-primary" onClick={this.props.onNext}>Next</button>
+                <button className="btn btn-primary" onClick={this.props.onNext}>Checkout</button>
             </div>
         </div>;
     }
