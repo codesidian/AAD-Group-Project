@@ -24,4 +24,5 @@ urlpatterns = [
     path('login', views.user_auth, name='login'),
     path('logout', views.user_logout, name='logout'),
     path('customer/', include('store.urls')),
+    path('api/', include('api.urls')),
 ]
