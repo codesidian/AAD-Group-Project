@@ -31,8 +31,8 @@
       <span v-if="data.value" class="mdi mdi-check"></span>
       <span v-if="!data.value" class="mdi mdi-close"></span>
     </template>
-    <!-- Format on_sale as tick/cross -->
-    <template v-slot:cell(on_sale)="data">
+    <!-- Format for_sale as tick/cross -->
+    <template v-slot:cell(for_sale)="data">
       <span v-if="data.value" class="mdi mdi-check"></span>
       <span v-if="!data.value" class="mdi mdi-close"></span>
     </template>
@@ -56,11 +56,11 @@
     </template>
     <div class="d-block text-center">
       <div>Name: [[ selectedEditProductName ]]</div>
-      <div>Price (in pence): [[ selectedEditProductPrice ]]</div>
+      <div>Price: [[ formatAsCurrency(selectedEditProductPrice) ]]</div>
       <div>Warning Quantity: [[ selectedEditProductWarningQuantity ]]</div>
       <div>Is Chemical: [[ selectedEditProductIsChemical ]]</div>
       <div>Pack Size: [[ selectedEditProductPackSize ]]</div>
-      <div>On Sale: [[ selectedEditProductOnSale ]]</div>
+      <div>For Sale: [[ selectedEditProductForSale ]]</div>
     </div>
   </b-modal>
 
