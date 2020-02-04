@@ -11,12 +11,13 @@ class User(AbstractUser):
 class Customer(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,primary_key=True)
     first_name = models.CharField(max_length=28)
-    last_name = models.CharField(max_length=28)
+    last_name   = models.CharField(max_length=28)
     charge_code = models.CharField(max_length=16)
     pays_vat = models.BooleanField(default=False)
     allowed_chemicals = models.BooleanField(default=False)
     enabled = models.BooleanField(default=True)
-    department_id = models.ForeignKey(
+    #Can a customer be in multiple depts?
+    dept = models.ForeignKey(
       'Department',
       on_delete=models.PROTECT,
       null=True
@@ -29,7 +30,7 @@ class Customer(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=56)
-    head_id = models.ForeignKey(
+    head = models.ForeignKey(
       'Customer',
       on_delete=models.PROTECT
     )
@@ -53,12 +54,12 @@ class Order(models.Model):
         CANCELLED = 'CA', _('Cancelled')
         COMPLETED = 'CO', _('Completed')
 
-    item_id = models.ForeignKey(
+    item = models.ForeignKey(
         'Item',
         on_delete=models.PROTECT
     )
     datetime = models.DateTimeField()
-    staff_id = models.ForeignKey(
+    staff = models.ForeignKey(
         'Staff',
         on_delete=models.PROTECT
     )
@@ -76,15 +77,15 @@ class Return(models.Model):
         WRONG_ITEM = 'WI', _('Wrong Item')
 
     datetime = models.DateTimeField()
-    staff_id = models.ForeignKey(
+    staff = models.ForeignKey(
         'Staff',
         on_delete=models.PROTECT
     )
-    customer_id = models.ForeignKey(
+    customer = models.ForeignKey(
         'Customer',
         on_delete=models.PROTECT
     )
-    sale_item_id = models.ForeignKey(
+    sale_item = models.ForeignKey(
         'SaleItem',
         on_delete=models.PROTECT
     )
@@ -97,18 +98,18 @@ class Return(models.Model):
 
 class Sale(models.Model):
     datetime = models.DateTimeField()
-    customer_id = models.ForeignKey(
+    customer = models.ForeignKey(
         'Customer',
         on_delete=models.PROTECT
     )
 
 
 class SaleItem(models.Model):
-    sale_id = models.ForeignKey(
+    sale = models.ForeignKey(
         'Sale',
         on_delete=models.CASCADE
     )
-    item_id = models.ForeignKey(
+    item = models.ForeignKey(
         'Item',
         on_delete=models.PROTECT
     )
@@ -139,18 +140,18 @@ class Staff(models.Model):
 
 class StockCheck(models.Model):
     datetime = models.DateTimeField()
-    staff_id = models.ForeignKey(
+    staff= models.ForeignKey(
         'Staff',
         on_delete=models.PROTECT
     )
 
 
 class StockCheckItem(models.Model):
-    stock_check_id = models.ForeignKey(
+    stock_check = models.ForeignKey(
       'StockCheck',
       on_delete=models.CASCADE
     )
-    item_id = models.ForeignKey(
+    item = models.ForeignKey(
       'Item',
       on_delete=models.PROTECT
     )

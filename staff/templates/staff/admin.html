@@ -2,5 +2,103 @@
 {% load static %}
 {% block title %}{{title}}{% endblock title %}}
 {% block page %}
-  <!-- put content here -->
+
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Create Customer</h5>
+        <p class="card-text">Create a new user account of type customer.</p>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#creatCustomerModal">Create Customer</button>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Create Staff</h5>
+        <p class="card-text">Create a new user account of type staff.</p>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createStaffModal">Create Staff</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Create Customer Modal -->
+<div class="modal fade" id="creatCustomerModal" tabindex="-1" role="dialog" aria-labelledby="creatCustomerModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="creatCustomerModalLabel">Create Customer Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'staffmodule-createCustomer' %}" method="post">
+       <div class="modal-body">
+        {% csrf_token %}
+          <div class="form-group">
+            <input id="username" name="username" type="text" class="form-control" placeholder="Username">
+            <input id="passwordA" name="passwordA" type="password" class="form-control" placeholder="Password">
+            <input id="passwordB" name="passwordB" type="password" class="form-control" placeholder="Re-enter Password">
+            <input id="email" name="email" type="email" class="form-control" placeholder="Email">
+            <input id="first_name" name="first_name" type="text" class="form-control" placeholder="First Name">
+            <input name="last_name" type="text" class="form-control" placeholder="Last Name">
+            <input name="charge_code" type="text" class="form-control" placeholder="Charge Code">
+                      <label for="deptselect">Department:</label>
+                      <select class="form-control" id="deptselect" name="department">
+                    {% for dept in departments %}
+                      <option value={{dept.id}}>{{dept.name}}</option>
+                    {% endfor %}
+                  </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button class="btn btn-primary" type="submit" onclick="">Create Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Create Staff Modal -->
+<div class="modal fade" id="createStaffModal" tabindex="-1" role="dialog" aria-labelledby="createStaffModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createStaffModalLabel">Create Staff Account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'staffmodule-createStaff' %}" method="post">
+       <div class="modal-body">
+        {% csrf_token %}
+          <div class="form-group">
+            <input id="username" name="username" type="text" class="form-control" placeholder="Username">
+            <input id="passwordA" name="passwordA" type="password" class="form-control" placeholder="Password">
+            <input id="passwordB" name="passwordB" type="password" class="form-control" placeholder="Re-enter Password">
+            <input id="email" name="email" type="email" class="form-control" placeholder="Email">
+            <input id="first_name" name="first_name" type="text" class="form-control" placeholder="First Name">
+            <input name="last_name" type="text" class="form-control" placeholder="Last Name">
+            <input name="charge_code" type="text" class="form-control" placeholder="Charge Code">
+                      <label for="deptselect">Department:</label>
+                      <select class="form-control" id="deptselect" name="department">
+                    {% for dept in departments %}
+                      <option value={{dept.id}}>{{dept.name}}</option>
+                    {% endfor %}
+                  </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button class="btn btn-primary" type="submit" onclick="">Create Staff</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock page %}
