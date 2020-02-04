@@ -1,17 +1,30 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-
+from django.contrib.auth.models import AbstractUser
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.conf import settings
+class User(AbstractUser):
+    #To determine whether or not a user is a customer, we can use this flag
+    is_customer = models.BooleanField(default=False)
+    
 class Customer(models.Model):
-    name = models.CharField(max_length=56)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,primary_key=True)
+    first_name = models.CharField(max_length=28)
+    last_name = models.CharField(max_length=28)
     charge_code = models.CharField(max_length=16)
-    pays_vat = models.BooleanField()
-    allowed_chemicals = models.BooleanField()
-    enabled = models.BooleanField()
+    pays_vat = models.BooleanField(default=False)
+    allowed_chemicals = models.BooleanField(default=False)
+    enabled = models.BooleanField(default=True)
     department_id = models.ForeignKey(
       'Department',
-      on_delete=models.PROTECT
+      on_delete=models.PROTECT,
+      null=True
     )
+    @property
+    def full_name(self):
+        return '%s %s' % (self.first_name, self.last_name)
+    
 
 
 class Department(models.Model):
@@ -109,15 +122,19 @@ class Staff(models.Model):
         TRAINEE = 'TR', _('Trainee')
         BASIC = 'BA', _('Basic')
         MANAGER = 'MA', _('Manager')
-
-    name = models.CharField(max_length=56)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,primary_key=True)
+    first_name = models.CharField(max_length=28)
+    last_name = models.CharField(max_length=28)
     login_code = models.CharField(max_length=16)
     access_level = models.CharField(
         max_length=2,
         choices=StaffAccessLevel.choices,
         default=StaffAccessLevel.TRAINEE
     )
-    enabled = models.BooleanField()
+    enabled = models.BooleanField(default=True)
+    @property
+    def full_name(self):
+        return '%s %s' % (self.first_name, self.last_name)
 
 
 class StockCheck(models.Model):
@@ -139,3 +156,14 @@ class StockCheckItem(models.Model):
     )
     observed_quantity = models.PositiveIntegerField()
     expected_quantity = models.PositiveIntegerField()
+
+#When a user is created, we create their profile based on what user type they are
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created: 
+        if instance.is_customer:  
+            userType = Customer.objects.create(user=instance)
+
+        else:
+            userType = Staff.objects.create(user=instance)
+
