@@ -8,3 +8,5 @@ pycodestyle==2.5.0
 pyflakes==2.1.1
 pytz==2019.3
 sqlparse==0.3.0
+django-background-tasks==1.2.5
+openpyxl==3.0.3
