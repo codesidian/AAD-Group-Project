@@ -1,15 +1,14 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
 
 def home(request):
    if request.user.is_authenticated:
     #models/database aren't complete yet
-    #if request.user.is_staff:
+    if request.user.is_customer:
+      return HttpResponseRedirect("/customer")
+    else:
       return HttpResponseRedirect("/staff")
-    #else:
-      #return HttpResponseRedirect("/store")
 
    else:
       return render(request,'login.html');
@@ -25,11 +24,14 @@ def user_auth(request):
    user = authenticate(request, username=username, password=password)
  
    if user is not None:
-       #will need to check user type
       print("Logging In...")
       login(request,user)
       print("Redirecting...")
-      return HttpResponseRedirect("/staff")
+      #Check if the user is a customer, and redirect as appropriate
+      if user.is_customer:
+         return HttpResponseRedirect("/customer")
+      else:
+         return HttpResponseRedirect("/staff")
    else:
       print("Failed to authenticate!")
       return HttpResponseRedirect("/")

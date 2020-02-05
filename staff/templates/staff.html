@@ -130,7 +130,7 @@
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
             <template v-slot:button-content>
-              <em>User</em>
+              <em>{{users_firstname}}</em>
             </template>
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#">Sign Out</b-dropdown-item>
@@ -138,6 +138,44 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
+      {% if messages %}
+        {% if alert.Type == "Success" %}
+          <div class="alert alert-success" role="alert">
+              {{alert.Message}}
+          </div>
+        {% elif alert.Type == "Error"%}
+          <div class="alert alert-danger" role="alert">
+              {{alert.Message}}
+          </div>
+        {% elif alert.Type == "Warn"%}
+          <div class="alert alert-warning" role="alert">
+              {{alert.Message}}
+          </div>
+        {% endif %}
+    {% endif %}
+
+    {% if messages %}
+      {% for message in messages %}
+        {% if message.tags == "success" %}
+          <div class="alert alert-success" role="alert">
+              {{message}}
+          </div>
+        {% elif message.tags == "error" %}
+          <div class="alert alert-danger" role="alert">
+              {{message}}
+          </div>
+        {% elif message.tags == "warning" %}
+          <div class="alert alert-warning" role="alert">
+              {{message}}
+          </div>
+        {% elif message.tags == "info" %}
+          <div class="alert alert-primary" role="alert">
+              {{message}}
+          </div>
+        {% endif %}  
+      {% endfor %}
+    {% endif %}
+
     {% block page %}{% endblock page %}
   </div>
   <script>
@@ -275,4 +313,5 @@
       delimiters: ['[[',']]']
     })
   </script>
+  {{username}}
 {% endblock content %}
