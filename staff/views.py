@@ -36,7 +36,6 @@ def intelligence(HttpRequest):
     return render(HttpRequest, 'staff/intelligence.html', context)
 
 @login_required
-#TODO: Access level decorators
 def admin(HttpRequest):
     departments =  Department.objects.all()
     access_levels =  Staff.StaffAccessLevel.choices

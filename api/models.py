@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.conf import settings
+from django.utils import timezone
+
 class User(AbstractUser):
     #To determine whether or not a user is a customer, we can use this flag
     is_customer = models.BooleanField(default=False)
@@ -60,7 +62,7 @@ class Order(models.Model):
         'Item',
         on_delete=models.PROTECT
     )
-    datetime = models.DateTimeField()
+    datetime = models.DateTimeField(default=timezone.now)
     staff = models.ForeignKey(
         'Staff',
         on_delete=models.PROTECT
@@ -78,7 +80,7 @@ class Return(models.Model):
         NOT_NEEDED = 'NN', _('Not Needed')
         WRONG_ITEM = 'WI', _('Wrong Item')
 
-    datetime = models.DateTimeField()
+    datetime = models.DateTimeField(default=timezone.now)
     staff = models.ForeignKey(
         'Staff',
         on_delete=models.PROTECT
@@ -99,7 +101,7 @@ class Return(models.Model):
 
 
 class Sale(models.Model):
-    datetime = models.DateTimeField()
+    datetime = models.DateTimeField(default=timezone.now)
     customer = models.ForeignKey(
         'Customer',
         on_delete=models.PROTECT
@@ -142,7 +144,7 @@ class Staff(models.Model):
 
 
 class StockCheck(models.Model):
-    datetime = models.DateTimeField()
+    datetime = models.DateTimeField(default=timezone.now)
     staff= models.ForeignKey(
         'Staff',
         on_delete=models.PROTECT
@@ -171,3 +173,18 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         else:
             userType = Staff.objects.create(user=instance)
 
+
+class Notification(models.Model):
+    #TODO: determine other notification types if any
+    class NotificationType(models.TextChoices):
+        LOW_STOCK = 'LO', _('Low Stock')
+        REPORT_READY = 'RE', _('Report Ready')
+        OTHER = 'OT', _('Other')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    message = models.CharField(max_length=300)
+    created_date = models.DateTimeField(default=timezone.now)
+    notification_type = models.CharField(
+        max_length=2,
+        choices=NotificationType.choices,
+        default=NotificationType.OTHER
+    )
