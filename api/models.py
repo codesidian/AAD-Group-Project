@@ -15,7 +15,9 @@ class Customer(models.Model):
     charge_code = models.CharField(max_length=16)
     pays_vat = models.BooleanField(default=False)
     allowed_chemicals = models.BooleanField(default=False)
-    enabled = models.BooleanField(default=True)
+    #already exists in user
+    #enabled = models.BooleanField(default=True)
+    
     #Can a customer be in multiple depts?
     dept = models.ForeignKey(
       'Department',
@@ -132,7 +134,8 @@ class Staff(models.Model):
         choices=StaffAccessLevel.choices,
         default=StaffAccessLevel.TRAINEE
     )
-    enabled = models.BooleanField(default=True)
+    #already exists in user
+    #enabled = models.BooleanField(default=True)
     @property
     def full_name(self):
         return '%s %s' % (self.first_name, self.last_name)

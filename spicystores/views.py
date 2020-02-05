@@ -5,10 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 def home(request):
    if request.user.is_authenticated:
     #models/database aren't complete yet
-    #if request.user.is_staff:
+    if request.user.is_customer:
+      return HttpResponseRedirect("/customer")
+    else:
       return HttpResponseRedirect("/staff")
-    #else:
-      #return HttpResponseRedirect("/store")
 
    else:
       return render(request,'login.html');

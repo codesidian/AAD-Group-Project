@@ -48,13 +48,13 @@
             <input id="first_name" name="first_name" type="text" class="form-control" placeholder="First Name">
             <input name="last_name" type="text" class="form-control" placeholder="Last Name">
             <input name="charge_code" type="text" class="form-control" placeholder="Charge Code">
-                      <label for="deptselect">Department:</label>
-                      <select class="form-control" id="deptselect" name="department">
-                    {% for dept in departments %}
-                      <option value={{dept.id}}>{{dept.name}}</option>
-                    {% endfor %}
-                  </select>
-            </div>
+            <label for="deptselect">Department:</label>
+            <select class="form-control" id="deptselect" name="department">
+              {% for dept in departments %}
+                <option value={{dept.id}}>{{dept.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -84,14 +84,14 @@
             <input id="email" name="email" type="email" class="form-control" placeholder="Email">
             <input id="first_name" name="first_name" type="text" class="form-control" placeholder="First Name">
             <input name="last_name" type="text" class="form-control" placeholder="Last Name">
-            <input name="charge_code" type="text" class="form-control" placeholder="Charge Code">
-                      <label for="deptselect">Department:</label>
-                      <select class="form-control" id="deptselect" name="department">
-                    {% for dept in departments %}
-                      <option value={{dept.id}}>{{dept.name}}</option>
-                    {% endfor %}
-                  </select>
-            </div>
+            <input name="login_code" type="text" class="form-control" placeholder="Login Code">
+            <label for="accessselect">Access Level:</label>
+            <select class="form-control" id="accessselect" name="access_level">
+              {% for level in access_levels %}
+                <option value={{level.0}}>{{level.1}}</option>
+              {% endfor %}
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
