@@ -23,6 +23,9 @@ class NotificationSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'id',
             'user_id',
-            'message',
-            'notification_type'
+            'text',
+            'created_date',
+            'notification_type',
+            'link',
+            'seen'
         )

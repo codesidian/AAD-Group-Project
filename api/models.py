@@ -181,10 +181,13 @@ class Notification(models.Model):
         REPORT_READY = 'RE', _('Report Ready')
         OTHER = 'OT', _('Other')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    message = models.CharField(max_length=300)
+    text = models.CharField(max_length=300)
     created_date = models.DateTimeField(default=timezone.now)
     notification_type = models.CharField(
         max_length=2,
         choices=NotificationType.choices,
         default=NotificationType.OTHER
     )
+    #TODO: maybe url field?
+    link = models.CharField(max_length=300)
+    seen = models.BooleanField(default=False)
