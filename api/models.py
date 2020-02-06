@@ -43,7 +43,8 @@ class Department(models.Model):
 class Item(models.Model):
     code = models.CharField(max_length=20)
     name = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=3, decimal_places=2)
+    #price in pennies
+    price = models.IntegerField()
     quantity = models.PositiveIntegerField()
     warning_quantity = models.PositiveIntegerField()
     is_chemical = models.BooleanField()

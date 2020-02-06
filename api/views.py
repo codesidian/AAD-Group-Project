@@ -8,11 +8,22 @@ from .models import Item, Notification
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+#MAYBE TODO: 
 class ItemViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, ]
     authentication_classes = [SessionAuthentication, ]
     queryset = Item.objects.all().order_by('id')
     serializer_class = ItemSerializer
+#TODO: Specific item details
+# receie item code
+
+
+#TODO: Checkout:
+# receive json of basket
+
+
+#MAYBE TODO: get customer details
+
 
 class NotificationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, ]
@@ -36,3 +47,5 @@ class NotificationViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+#TODO: 

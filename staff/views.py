@@ -36,6 +36,8 @@ def intelligence(HttpRequest):
     context = {'title': 'Intelligence'}
     return render(HttpRequest, 'staff/intelligence.html', context)
 
+#TODO: Customer managemenet. Setting enabled disabled. 
+
 @login_required
 def admin(HttpRequest):
     departments =  Department.objects.all()
@@ -122,4 +124,4 @@ def genWeeklySales(HttpRequest):
     toDate = timezone.now() 
     generateSalesReport(HttpRequest.user.id,fromDate,toDate)
     return HttpResponseRedirect("reports")
-    
+
