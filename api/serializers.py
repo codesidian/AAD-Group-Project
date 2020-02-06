@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Item
+from .models import Item, Notification
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
@@ -15,4 +15,17 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
             'is_chemical',
             'pack_size',
             'for_sale'
+        )
+
+class NotificationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Notification
+        fields = (
+            'id',
+            'user_id',
+            'text',
+            'created_date',
+            'notification_type',
+            'link',
+            'seen'
         )

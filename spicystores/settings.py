@@ -25,7 +25,7 @@ SECRET_KEY = 'ay_mq2r*f29_ce!6&2wzu+rt0j)50k!d2h2ly6tkd%hj2@i26$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 LOGIN_URL = '/'
-
+AUTH_USER_MODEL = 'api.User'
 ALLOWED_HOSTS = ['*']
 STATIC_ROOT = "static"
 STATICFILES_FINDERS = [
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'background_task',
     'staff',
     'store',
     'api',

@@ -42,6 +42,10 @@
     crossorigin="anonymous"
   >
   </script>
+  <script>
+  axios.defaults.xsrfCookieName = 'csrftoken'
+  axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+  </script>
   <style type="text/css">
     .notificationsCountBadge {
       margin-top: -0.25em;
@@ -51,6 +55,9 @@
       transform-origin: top right;
     }
   </style>
+
+ 
+
 {% endblock head %}
 {% block content %}
   <div id="app">
@@ -115,22 +122,23 @@
           <b-nav-item-dropdown right>
             <template v-slot:button-content>
               <span class="mdi mdi-bell"></span>
-              <span>
-                Notifications
-                <b-badge v-if="notificationsCount > 0" pill variant="danger">[[ notificationsCount ]]</b-badge>
-              </span>
+                <span>
+                  Notifications 
+                  <b-badge v-if="notificationsCount > 0" pill variant="danger">[[ notificationsCount ]]</b-badge>
+                </span>
             </template>
             <span v-for="(notification, index) in notifications">
               <b-dropdown-item :href="notification.link">
-                [[ notification.text ]]
-              </b-dropdown-item>
+                [[ notification.text ]] 
+                <i class="mdi mdi-delete thumby" style="float:right" @click="setNotificationSeen(notification.id)"></i>
+              </b-dropdown-item> 
               <b-dropdown-divider v-if="index < notificationsCount-1"></b-dropdown-divider>
-            </span>
+            </span> 
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
             <template v-slot:button-content>
-              <em>User</em>
+              <em>{{users_firstname}}</em>
             </template>
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#">Sign Out</b-dropdown-item>
@@ -138,6 +146,44 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
+      {% if messages %}
+        {% if alert.Type == "Success" %}
+          <div class="alert alert-success" role="alert">
+              {{alert.Message}}
+          </div>
+        {% elif alert.Type == "Error"%}
+          <div class="alert alert-danger" role="alert">
+              {{alert.Message}}
+          </div>
+        {% elif alert.Type == "Warn"%}
+          <div class="alert alert-warning" role="alert">
+              {{alert.Message}}
+          </div>
+        {% endif %}
+    {% endif %}
+
+    {% if messages %}
+      {% for message in messages %}
+        {% if message.tags == "success" %}
+          <div class="alert alert-success" role="alert">
+              {{message}}
+          </div>
+        {% elif message.tags == "error" %}
+          <div class="alert alert-danger" role="alert">
+              {{message}}
+          </div>
+        {% elif message.tags == "warning" %}
+          <div class="alert alert-warning" role="alert">
+              {{message}}
+          </div>
+        {% elif message.tags == "info" %}
+          <div class="alert alert-primary" role="alert">
+              {{message}}
+          </div>
+        {% endif %}  
+      {% endfor %}
+    {% endif %}
+
     {% block page %}{% endblock page %}
   </div>
   <script>
@@ -210,6 +256,10 @@
         selectedEditProductForSale: '',
       },
       methods: {
+        setNotificationSeen(id) {
+          axios.post('/api/notifications/'+id+'/seen/').then(({ data }) => {
+        });
+        },
         editProduct(id) {
           this.selectedEditProduct = id
           this.selectedEditProductCode = this.products[id-1].code
@@ -270,9 +320,13 @@
       beforeCreate: function() {
         this.products = axios.get('/api/items/').then(({ data }) => {
           this.products = data
-        })
+        });
+         this.notifications = axios.get('/api/notifications/').then(({ data }) => {
+          this.notifications = data
+        });
       },
       delimiters: ['[[',']]']
     })
   </script>
+  {{username}}
 {% endblock content %}

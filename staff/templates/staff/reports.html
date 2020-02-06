@@ -15,4 +15,9 @@
       [[ moment(report.datetime).format(dateTimeStringFormat) ]]
     </b-list-group-item>
   </b-list-group>
+
+        <form action="{% url 'staffmodule-genweeklysales' %}" method="post">
+        {% csrf_token %}
+          <button class="btn btn-primary" type="submit" onclick="">GenSalesReport</button>
+      </form>
 {% endblock page %}
