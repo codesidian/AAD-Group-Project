@@ -26,9 +26,6 @@ export default class QRScanner extends React.Component<QRScannerProps, QRScanner
         const stream = this.state.stream;
         
         if (!this.state.running) {
-            if (stream !== undefined) {
-                stream.getTracks().forEach(x => x.stop());
-            }
             return;
         }
 
@@ -56,6 +53,7 @@ export default class QRScanner extends React.Component<QRScannerProps, QRScanner
 
             if (code) {
                 this.props.qrScanned(code.data);
+                stream.getTracks().forEach(x => x.stop());
                 return;
             }
         }
@@ -72,5 +70,8 @@ export default class QRScanner extends React.Component<QRScannerProps, QRScanner
 
     componentWillUnmount() {
         this.setState({running: false});
+        if (this.state.stream !== undefined) {
+            this.state.stream.getTracks().forEach(x => x.stop());
+        }
     }
 }
