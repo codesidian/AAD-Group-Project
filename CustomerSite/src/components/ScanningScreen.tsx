@@ -70,7 +70,7 @@ export default class ScanningScreen extends React.Component<ScanningScreenProps,
         })();
         return <div>
             {currentScreen}
-            <ProductTable cart={this.props.cart} editable={true} />
+            <ProductTable items={this.props.cart.getItems()} edit={this.props.cart.setItemQuantity} />
             <button className="btn btn-primary" onClick={this.props.onNext} style={{width: "100%"}}>Next</button>
         </div>;
     }

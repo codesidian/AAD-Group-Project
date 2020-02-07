@@ -18,6 +18,7 @@ export default class RecieptScreen extends React.Component<RecieptScreenProps> {
 
         return <div>
             <h1>Recipet</h1>
+            <ProductTable items={this.props.sale.items} />
             <div>Total price: £{(totalPrice / 100).toFixed(2)}</div>
             <div className="btn-group" role="group" style={{width: "100%"}}>
                 <button className="btn btn-primary" onClick={this.props.onNext}>Finish</button>

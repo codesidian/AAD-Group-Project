@@ -4,15 +4,15 @@ import { SaleItem } from "../data/Types";
 import ProductRow from "./ProductRow";
 
 type ProductTableProps = {
-    cart: Cart;
-    editable: boolean;
+    items: ArrayLike<SaleItem>;
+    edit?: (code: string, quantity: number) => void;
 };
 
 export default class ProductTable extends React.Component<ProductTableProps> {
     render() {
-        const rows = Array.from(this.props.cart.getItems()).map(
-            x => <ProductRow key={x.item.code} cart={this.props.cart} editable={this.props.editable} item={x} />
-        )
+        const rows = Array.from(this.props.items).map(
+            x => <ProductRow key={x.item.code} edit={this.props.edit} item={x} />
+        );
         return <table className="table">
             <thead>
                 <tr><th>Name</th><th>Quantity</th><th>Price</th></tr>
