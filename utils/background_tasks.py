@@ -39,3 +39,8 @@ def generateSalesReport(userId,fromDate,toDate):
 
 def generateReturnsReport(userid):
     return NotImplementedError
+
+def resetPasswordEmail(userid):
+    #ask for email
+    #new pass
+    return NotImplementedError

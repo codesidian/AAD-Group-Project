@@ -318,12 +318,15 @@
         }
       },
       beforeCreate: function() {
+
         this.products = axios.get('/api/items/').then(({ data }) => {
           this.products = data
         });
+
          this.notifications = axios.get('/api/notifications/').then(({ data }) => {
           this.notifications = data
         });
+        
       },
       delimiters: ['[[',']]']
     })
