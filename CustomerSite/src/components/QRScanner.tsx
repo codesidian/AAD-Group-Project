@@ -56,6 +56,7 @@ export default class QRScanner extends React.Component<QRScannerProps, QRScanner
 
             if (code) {
                 this.props.qrScanned(code.data);
+                return;
             }
         }
         
