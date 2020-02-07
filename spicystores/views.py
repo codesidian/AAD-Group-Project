@@ -14,6 +14,7 @@ def home(request):
       return render(request,'login.html');
 
 def user_auth(request):
+   #TODO: Better user feedback. Ie. Password incorrect. 
    print("Authenticating...")
    try:
       password = request.POST['password']

@@ -1,11 +1,12 @@
 import * as React from "react";
 import Welcome from "./Welcome";
 import ScanningScreen from "./ScanningScreen";
-import { StoresDAO } from "../data/Types";
-import Cart from "../data/Cart";
+import { StoresDAO, Sale } from "../data/Types";
 import ObservableCart from "../data/ObservableCart";
 import MemoryCart from "../data/MemoryCart";
 import OverviewScreen from "./OverviewScreen";
+import PurchasingScreen from "./PurchasingScreen";
+import RecieptScreen from "./RecieptScreen";
 
 type AppProps = {
     dao: StoresDAO;
@@ -22,6 +23,7 @@ enum Stage {
 type AppState = {
     stage: Stage;
     cart: ObservableCart;
+    sale?: Sale;
 }
 
 export default class App extends React.Component<AppProps, AppState> {
@@ -62,6 +64,18 @@ export default class App extends React.Component<AppProps, AppState> {
                     cart={cart}
                     onNext={() => this.changeStage(Stage.Purchasing)}
                     onBack={() => this.changeStage(Stage.Scanning)}
+                />;
+            case Stage.Purchasing:
+                return <PurchasingScreen
+                    dao={dao}
+                    cart={cart}
+                    onNext={(sale) => { this.setState({sale: sale}); this.changeStage(Stage.Recipt); }}
+                    onBack={() => this.changeStage(Stage.Overview)}
+                />;
+            case Stage.Recipt:
+                return <RecieptScreen
+                    sale={this.state.sale as Sale}
+                    onNext={() => this.changeStage(Stage.Start)}
                 />;
             default:
                 return <div>

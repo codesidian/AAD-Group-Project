@@ -5,8 +5,9 @@ from api.models import Department, Customer, User, Staff
 from django.contrib import messages
 from django.db import transaction
 from utils.decorators import staff_required, basic_required, manager_required
-# from .models import ???
-
+from utils.background_tasks import generateSalesReport
+from django.utils import timezone
+from datetime import timedelta
 
 @login_required
 def home(HttpRequest):
@@ -34,6 +35,8 @@ def sales(HttpRequest):
 def intelligence(HttpRequest):
     context = {'title': 'Intelligence'}
     return render(HttpRequest, 'staff/intelligence.html', context)
+
+#TODO: Customer managemenet. Setting enabled disabled. 
 
 @login_required
 def admin(HttpRequest):
@@ -115,3 +118,10 @@ def createStaff(HttpRequest):
         else:
             messages.error(HttpRequest, 'Staff account creation failed, please check field lengths and passwords match.')
     return HttpResponseRedirect("admin")
+
+def genWeeklySales(HttpRequest):
+    fromDate = timezone.now() - timedelta(days=7)
+    toDate = timezone.now() 
+    generateSalesReport(HttpRequest.user.id,fromDate,toDate)
+    return HttpResponseRedirect("reports")
+

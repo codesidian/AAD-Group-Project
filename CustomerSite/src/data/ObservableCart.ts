@@ -9,26 +9,26 @@ export default class ObservableCart implements Cart {
     constructor(public backingCart: Cart) {
     }
 
-    addItem(item: Item): void {
+    addItem = (item: Item): void => {
         this.backingCart.addItem(item);
         this.invokeObservers();
     }
     
-    getItems(): ArrayLike<SaleItem> {
+    getItems = (): ArrayLike<SaleItem> => {
         return this.backingCart.getItems();
     }
 
-    setItemQuantity(code: string, quantity: number): void {
+    setItemQuantity = (code: string, quantity: number): void => {
         this.backingCart.setItemQuantity(code, quantity);
         this.invokeObservers();
     }
 
-    clear(): void {
+    clear = () => {
         this.backingCart.clear();
         this.invokeObservers();
     }
 
-    invokeObservers() {
+    invokeObservers = () => {
         this.observers.forEach(observer => {
             if (observer !== undefined) {
                 observer(this);
@@ -36,11 +36,11 @@ export default class ObservableCart implements Cart {
         });
     }
 
-    addObserver(observer: CartObserver): number {
+    addObserver = (observer: CartObserver): number => {
         return this.observers.push(observer) - 1;
     }
 
-    removeObsever(handle: number) {
+    removeObsever = (handle: number) => {
         this.observers[handle] = undefined;
     }
 }
