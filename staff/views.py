@@ -122,6 +122,6 @@ def createStaff(HttpRequest):
 def genWeeklySales(HttpRequest):
     fromDate = timezone.now() - timedelta(days=7)
     toDate = timezone.now() 
-    generateSalesReport(HttpRequest.user.id,fromDate,toDate)
+    generateSalesReport(HttpRequest.user.id,str(fromDate),str(toDate))
     return HttpResponseRedirect("reports")
 

@@ -14,6 +14,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication, ]
     queryset = Item.objects.all().order_by('id')
     serializer_class = ItemSerializer
+    
 #TODO: Specific item details
 # receie item code
 
