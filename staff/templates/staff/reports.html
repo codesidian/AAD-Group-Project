@@ -24,4 +24,8 @@
         {% csrf_token %}
           <button class="btn btn-primary" type="submit" onclick="">GenReturnReport</button>
       </form>
+      <form action="{% url 'staffmodule-genStockReport' %}" method="post">
+        {% csrf_token %}
+          <button class="btn btn-primary" type="submit" onclick="">GenStockReport</button>
+      </form>
 {% endblock page %}

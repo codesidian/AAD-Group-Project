@@ -5,7 +5,7 @@ from api.models import Department, Customer, User, Staff
 from django.contrib import messages
 from django.db import transaction
 from utils.decorators import staff_required, basic_required, manager_required
-from utils.background_tasks import generateSalesReport, generateReturnsReport
+from utils.background_tasks import generateSalesReport, generateReturnsReport, generateStockReport
 from django.utils import timezone
 from datetime import timedelta
 
@@ -129,4 +129,10 @@ def genReturnReport(HttpRequest):
     fromDate = timezone.now() - timedelta(days=7)
     toDate = timezone.now() 
     generateReturnsReport(HttpRequest.user.id,str(fromDate),str(toDate))
+    return HttpResponseRedirect("reports")
+
+def genStockReport(HttpRequest):
+    fromDate = timezone.now() - timedelta(days=7)
+    toDate = timezone.now() 
+    generateStockReport(HttpRequest.user.id,True,str(fromDate),str(toDate))
     return HttpResponseRedirect("reports")

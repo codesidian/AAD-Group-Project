@@ -1,6 +1,6 @@
 from background_task import background
 from django.conf import settings
-from api.models import Notification, Sale, SaleItem, Item, Customer, Return, Staff
+from api.models import Notification, Sale, SaleItem, Item, Customer, Return, Staff, StockCheck, StockCheckItem
 from openpyxl import Workbook
 import uuid
 
@@ -66,6 +66,41 @@ def generateReturnsReport(userid,fromDate,toDate):
         ws1.append(currentRow)
     wb.save("Return_Report"+str(uuid.uuid4())+".xlsx")
     reportMessage="Return Report Ready"
+
+    notify = Notification(user_id=userid,text=reportMessage,notification_type="RE",link="NotImplemented",seen=False)
+    notify.save()
+
+#We can take a bool for if to include a second sheet for stockchecks. 
+@background(schedule=60)
+def generateStockReport(userid, includeChecks, fromDate = "", toDate = ""):
+    items = Item.objects.all()
+    headers = ['Item ID','Item Code','Item Name','Item Price','Quantity','Warning Quantity','Is Chemical','Pack Size','For Sale']
+    wb = Workbook()
+    ws1 = wb.active
+    ws1.title = "Stock Report" 
+    ws1.append(headers)
+    for item in items:
+        currentRow=[item.id, item.code, item.name, (item.price/100), item.quantity, item.warning_quantity, item.is_chemical, item.pack_size, item.for_sale]
+        ws1.append(currentRow)
+    #Optional Stock Checks
+    if includeChecks:
+        #Sheet 2 stocks checks
+        headers = ['Date','Staff Member','Item Code', 'Item Name','Observed Quantity','Expected Quantity','Warning Quantity']
+        ws2 = wb.create_sheet(title="Stock Check Report")
+        ws2.title = "Stock Check Report" 
+        ws2.append(headers)
+        for check in StockCheck.objects.filter(datetime__range=[fromDate, toDate]):
+            checkStaff = Staff.objects.get(user_id=check.staff_id)
+            checkedItem = StockCheckItem.objects.get(id=check.id)
+            itemDetails = Item.objects.get(id=checkedItem.item_id)
+            currentRow = [check.datetime, checkStaff.full_name, 
+                        itemDetails.code, itemDetails.name, 
+                        checkedItem.observed_quantity, checkedItem.expected_quantity, 
+                        itemDetails.warning_quantity]
+            ws2.append(currentRow)
+
+    wb.save("Stock_Report"+str(uuid.uuid4())+".xlsx")
+    reportMessage="Stock Report Ready"
 
     notify = Notification(user_id=userid,text=reportMessage,notification_type="RE",link="NotImplemented",seen=False)
     notify.save()
