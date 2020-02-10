@@ -5,7 +5,7 @@ from api.models import Department, Customer, User, Staff
 from django.contrib import messages
 from django.db import transaction
 from utils.decorators import staff_required, basic_required, manager_required
-from utils.background_tasks import generateSalesReport
+from utils.background_tasks import generateSalesReport, generateReturnsReport
 from django.utils import timezone
 from datetime import timedelta
 
@@ -119,9 +119,14 @@ def createStaff(HttpRequest):
             messages.error(HttpRequest, 'Staff account creation failed, please check field lengths and passwords match.')
     return HttpResponseRedirect("admin")
 
-def genWeeklySales(HttpRequest):
+def genSalesReport(HttpRequest):
     fromDate = timezone.now() - timedelta(days=7)
     toDate = timezone.now() 
     generateSalesReport(HttpRequest.user.id,str(fromDate),str(toDate))
     return HttpResponseRedirect("reports")
 
+def genReturnReport(HttpRequest):
+    fromDate = timezone.now() - timedelta(days=7)
+    toDate = timezone.now() 
+    generateReturnsReport(HttpRequest.user.id,str(fromDate),str(toDate))
+    return HttpResponseRedirect("reports")

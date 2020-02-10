@@ -16,8 +16,12 @@
     </b-list-group-item>
   </b-list-group>
 
-        <form action="{% url 'staffmodule-genweeklysales' %}" method="post">
+        <form action="{% url 'staffmodule-genSalesReport' %}" method="post">
         {% csrf_token %}
           <button class="btn btn-primary" type="submit" onclick="">GenSalesReport</button>
+      </form>
+      <form action="{% url 'staffmodule-genReturnReport' %}" method="post">
+        {% csrf_token %}
+          <button class="btn btn-primary" type="submit" onclick="">GenReturnReport</button>
       </form>
 {% endblock page %}
