@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 {% block head %}
+  <style type="text/css">
+    /* For the "Generate:" pseudo-label on the Reports page */
+    .generate-button {
+      cursor: default !important;
+    }
+  </style>
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.2.2/dist/bootstrap-vue.min.css"
@@ -43,8 +49,8 @@
   >
   </script>
   <script>
-  axios.defaults.xsrfCookieName = 'csrftoken'
-  axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+    axios.defaults.xsrfCookieName = 'csrftoken'
+    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
   </script>
   <style type="text/css">
     .notificationsCountBadge {
@@ -55,9 +61,6 @@
       transform-origin: top right;
     }
   </style>
-
- 
-
 {% endblock head %}
 {% block content %}
   <div id="app">
@@ -258,8 +261,9 @@
       methods: {
         setNotificationSeen(id) {
           axios.post('/api/notifications/'+id+'/seen/').then(({ data }) => {
-        });
+          });
         },
+
         editProduct(id) {
           this.selectedEditProduct = id
           this.selectedEditProductCode = this.products[id-1].code
@@ -270,6 +274,18 @@
           this.selectedEditProductPackSize = this.products[id-1].pack_size
           this.selectedEditProductForSale = this.products[id-1].for_sale
           this.$bvModal.show('bv-modal-product')
+        },
+
+        generateReturnsReport() {
+          axios.post("{% url 'staffmodule-genReturnReport' %}")
+        },
+
+        generateSalesReport() {
+          axios.post("{% url 'staffmodule-genSalesReport' %}")
+        },
+
+        generateStockReport() {
+          axios.post("{% url 'staffmodule-genStockReport' %}")
         },
 
         isActive(url) {
