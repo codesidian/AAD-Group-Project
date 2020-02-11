@@ -6,6 +6,11 @@
     .generate-button {
       cursor: default !important;
     }
+
+    #selectedProductQrContainer * {
+      height: 20em;
+      width: 20em;
+    }
   </style>
   <link
     rel="stylesheet"
@@ -45,6 +50,12 @@
   <script
     src="https://cdn.jsdelivr.net/npm/axios@0.19.2/dist/axios.min.js"
     integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ="
+    crossorigin="anonymous"
+  >
+  </script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"
+    integrity="sha256-GK45n4EYK8nekW6cd7GV3yDMWNby1VpisIWimfG/F4A="
     crossorigin="anonymous"
   >
   </script>
@@ -220,7 +231,7 @@
           { key: 'is_chemical', sortable: true },
           { key: 'pack_size', sortable: true },
           { key: 'for_sale', sortable: true },
-          { key: 'edit' }
+          { key: 'buttons', label: '' }
         ],
         products: [],
         reports: [
@@ -257,6 +268,7 @@
         selectedEditProductIsChemical: '',
         selectedEditProductPackSize: '',
         selectedEditProductForSale: '',
+        selectedProductQr: '',
       },
       methods: {
         setNotificationSeen(id) {
@@ -274,6 +286,16 @@
           this.selectedEditProductPackSize = this.products[id-1].pack_size
           this.selectedEditProductForSale = this.products[id-1].for_sale
           this.$bvModal.show('bv-modal-product')
+        },
+
+        generateProductQR(id) {
+          var typeNumber = 4
+          var errorCorrectionLevel = 'L'
+          var qr = qrcode(typeNumber, errorCorrectionLevel)
+          qr.addData(this.products[id-1].code)
+          qr.make()
+          this.selectedProductQr = qr.createSvgTag()
+          this.$bvModal.show('bv-modal-product-qr-code')
         },
 
         generateReturnsReport() {
