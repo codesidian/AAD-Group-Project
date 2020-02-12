@@ -123,7 +123,7 @@ class SaleItem(models.Model):
         'Item',
         on_delete=models.PROTECT
     )
-    sale_price = models.DecimalField(max_digits=3, decimal_places=2)
+    sale_price = models.IntegerField()
     quantity = models.PositiveIntegerField()
     returned_quantity = models.PositiveIntegerField()
 

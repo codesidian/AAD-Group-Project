@@ -2,11 +2,15 @@ from rest_framework import viewsets, mixins, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 
-from .serializers import ItemSerializer, NotificationSerializer
-from .models import Item, Notification
+from .serializers import ItemSerializer, NotificationSerializer, SaleSerializer, SaleItemSerializer
+from .models import Item, Notification, Sale, SaleItem, Customer
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from django.db import transaction
+
+from datetime import datetime
 
 #MAYBE TODO: 
 class ItemViewSet(viewsets.ModelViewSet):
@@ -22,7 +26,50 @@ class ItemViewSet(viewsets.ModelViewSet):
 
 #TODO: Checkout:
 # receive json of basket
+class SaleViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    authentication_classes = [SessionAuthentication, ]
+    queryset = Sale.objects.all().order_by('id')
+    serializer_class = SaleSerializer
 
+    @action(detail=False, methods=['put'])
+    def make(self, request, pk=None):
+        data = request.data
+        with transaction.atomic():
+            sale = Sale()
+            try:
+                sale.customer = Customer.objects.get(user_id=self.request.user.id)
+            except Customer.DoesNotExist:
+                return Response(status=403)
+            sale.datetime = datetime.today()
+            sale.save()
+            for item in data['items']:
+                dbitem = Item.objects.get(code=item['code'])
+                quantity = max(min(item['quantity'], dbitem.quantity), 0)
+                if quantity == 0:
+                    continue
+
+                dbitem.quantity -= quantity
+                dbitem.save()
+
+                saleitem = SaleItem()
+                saleitem.sale = sale
+                saleitem.item = dbitem
+                saleitem.quantity = quantity
+                saleitem.sale_price = dbitem.price
+                saleitem.returned_quantity = 0
+                saleitem.save()
+            
+            seralizer = self.serializer_class(sale, context={'request': request})
+
+            return Response(seralizer.data)
+
+
+class SaleItemViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    authentication_classes = [SessionAuthentication, ]
+    queryset = SaleItem.objects.all().order_by('id')
+    serializer_class = SaleItemSerializer
 
 #MAYBE TODO: get customer details
 
