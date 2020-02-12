@@ -20,8 +20,8 @@ export type SaleItem = {
 };
 
 export type Sale = {
-    sale_id: number;
-    items: ArrayLike<SaleItem>;
+    id: number;
+    saleitem_set: ArrayLike<SaleItem>;
 };
 
 export function isItem(obj: any): obj is Item {
@@ -36,5 +36,5 @@ export function isSaleItem(obj: any): obj is SaleItem {
 
 export function isSale(obj: any): obj is Sale {
     let sale = obj as Sale;
-    return sale.sale_id !== undefined && sale.items !== undefined;
+    return sale.id !== undefined && sale.saleitem_set !== undefined;
 }

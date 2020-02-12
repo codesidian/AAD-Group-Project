@@ -26,7 +26,7 @@ export default class TestDAO implements Types.StoresDAO {
 
     checkout(items: ArrayLike<Types.SaleItem>): Promise<Types.Sale> {
         return new Promise<Types.Sale>((res, rej) => {
-            let sale: Types.Sale = {items: items, sale_id: 1234};
+            let sale: Types.Sale = {saleitem_set: items, id: 1234};
             res(sale);
         });
     }
