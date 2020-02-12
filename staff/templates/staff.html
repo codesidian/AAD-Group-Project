@@ -1,16 +1,27 @@
 {% extends "base.html" %}
 {% load static %}
 {% block head %}
+  <style type="text/css">
+    /* For the "Generate:" pseudo-label on the Reports page */
+    .generate-button {
+      cursor: default !important;
+    }
+
+    #selectedProductQrContainer * {
+      height: 20em;
+      width: 20em;
+    }
+  </style>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.2.2/dist/bootstrap-vue.min.css"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.4.0/dist/bootstrap-vue.min.css"
     integrity="sha256-BQExbNCY9XfpMxIDtbF2wLTOByjL9Hwdb37ZQX/xHlU="
     crossorigin="anonymous"
   >
   <link
     rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/4.8.95/css/materialdesignicons.min.css"
-    integrity="sha256-jO/moMNzM6DGEeJJj1uKQi6owdTw3cgIPs0Moo6N1X8="
+    href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/4.9.95/css/materialdesignicons.min.css"
+    integrity="sha256-orhFmLdAikn1cv90PcWIa93VOQx4tAQWA32hnBP40M4="
     crossorigin="anonymous"
   >
   <script
@@ -25,10 +36,11 @@
   >
   </script>
   <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.2.2/dist/bootstrap-vue.min.js"
-    integrity="sha256-kGiCnEPGrBPklSXJb5j8wS9W02OvXSpUxDTkCeqxf0E="
+    src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.4.0/dist/bootstrap-vue.min.js"
+    integrity="sha256-e0QOAQ+hAFQ07IpRGn0cHiXweBZO1Ez6H6xZ1XCuA0I="
     crossorigin="anonymous"
   >
+  </script>
   </script>
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
@@ -42,9 +54,15 @@
     crossorigin="anonymous"
   >
   </script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"
+    integrity="sha256-GK45n4EYK8nekW6cd7GV3yDMWNby1VpisIWimfG/F4A="
+    crossorigin="anonymous"
+  >
+  </script>
   <script>
-  axios.defaults.xsrfCookieName = 'csrftoken'
-  axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+    axios.defaults.xsrfCookieName = 'csrftoken'
+    axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
   </script>
   <style type="text/css">
     .notificationsCountBadge {
@@ -55,9 +73,6 @@
       transform-origin: top right;
     }
   </style>
-
- 
-
 {% endblock head %}
 {% block content %}
   <div id="app">
@@ -217,7 +232,7 @@
           { key: 'is_chemical', sortable: true },
           { key: 'pack_size', sortable: true },
           { key: 'for_sale', sortable: true },
-          { key: 'edit' }
+          { key: 'buttons', label: '' }
         ],
         products: [],
         reports: [
@@ -242,7 +257,7 @@
           { key: 'refund', label: '' }
         ],
         sales: [
-          { id: 1, datetime: '2020-01-24T11:06:00+0000', customer_id: 'nigel.king', total: 2000, items: [
+          { id: 1, datetime: '2020-01-24T11:06:00+0000', customer_id: 'nigel.king', total: 20.00, items: [
             { code: 'CH01', name: 'Isopropyl Alcohol', quantity: 10, price_at_sale: 2 }
           ]},
         ],
@@ -254,12 +269,14 @@
         selectedEditProductIsChemical: '',
         selectedEditProductPackSize: '',
         selectedEditProductForSale: '',
+        selectedProductQr: '',
       },
       methods: {
         setNotificationSeen(id) {
           axios.post('/api/notifications/'+id+'/seen/').then(({ data }) => {
-        });
+          });
         },
+
         editProduct(id) {
           this.selectedEditProduct = id
           this.selectedEditProductCode = this.products[id-1].code
@@ -270,6 +287,28 @@
           this.selectedEditProductPackSize = this.products[id-1].pack_size
           this.selectedEditProductForSale = this.products[id-1].for_sale
           this.$bvModal.show('bv-modal-product')
+        },
+
+        generateProductQR(id) {
+          var typeNumber = 4
+          var errorCorrectionLevel = 'L'
+          var qr = qrcode(typeNumber, errorCorrectionLevel)
+          qr.addData(this.products[id-1].code)
+          qr.make()
+          this.selectedProductQr = qr.createSvgTag()
+          this.$bvModal.show('bv-modal-product-qr-code')
+        },
+
+        generateReturnsReport() {
+          axios.post("{% url 'staffmodule-genReturnReport' %}")
+        },
+
+        generateSalesReport() {
+          axios.post("{% url 'staffmodule-genSalesReport' %}")
+        },
+
+        generateStockReport() {
+          axios.post("{% url 'staffmodule-genStockReport' %}")
         },
 
         isActive(url) {
@@ -294,7 +333,7 @@
         },
 
         formatAsCurrency(val) {
-          return '£' + val.replace(/\d(?=(\d{3})+\.)/g, '$&,')
+          return '£' + val.toString().replace(/\d(?=(\d{3})+\.)/g, '$&,')
         },
 
         refundSaleItem(id) {

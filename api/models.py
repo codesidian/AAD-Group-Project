@@ -6,21 +6,27 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from django.utils import timezone
 
+
 class User(AbstractUser):
-    #To determine whether or not a user is a customer, we can use this flag
+    # To determine whether or not a user is a customer, we can use this flag
     is_customer = models.BooleanField(default=False)
-    
+
+
 class Customer(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,primary_key=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
     first_name = models.CharField(max_length=28)
-    last_name   = models.CharField(max_length=28)
+    last_name = models.CharField(max_length=28)
     charge_code = models.CharField(max_length=16)
     pays_vat = models.BooleanField(default=False)
     allowed_chemicals = models.BooleanField(default=False)
-    #already exists in user
-    #enabled = models.BooleanField(default=True)
-    
-    #Can a customer be in multiple depts?
+    # already exists in user
+    # enabled = models.BooleanField(default=True)
+
+    # Can a customer be in multiple depts?
     dept = models.ForeignKey(
       'Department',
       on_delete=models.PROTECT,
@@ -29,7 +35,6 @@ class Customer(models.Model):
     @property
     def full_name(self):
         return '%s %s' % (self.first_name, self.last_name)
-    
 
 
 class Department(models.Model):
@@ -128,7 +133,11 @@ class Staff(models.Model):
         TRAINEE = 'TR', _('Trainee')
         BASIC = 'BA', _('Basic')
         MANAGER = 'MA', _('Manager')
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,primary_key=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
     first_name = models.CharField(max_length=28)
     last_name = models.CharField(max_length=28)
     login_code = models.CharField(max_length=16)
@@ -137,8 +146,8 @@ class Staff(models.Model):
         choices=StaffAccessLevel.choices,
         default=StaffAccessLevel.TRAINEE
     )
-    #already exists in user
-    #enabled = models.BooleanField(default=True)
+    # already exists in user
+    # enabled = models.BooleanField(default=True)
     @property
     def full_name(self):
         return '%s %s' % (self.first_name, self.last_name)
@@ -146,7 +155,7 @@ class Staff(models.Model):
 
 class StockCheck(models.Model):
     datetime = models.DateTimeField(default=timezone.now)
-    staff= models.ForeignKey(
+    staff = models.ForeignKey(
         'Staff',
         on_delete=models.PROTECT
     )
@@ -164,11 +173,12 @@ class StockCheckItem(models.Model):
     observed_quantity = models.PositiveIntegerField()
     expected_quantity = models.PositiveIntegerField()
 
-#When a user is created, we create their profile based on what user type they are
+# When a user is created, we create their profile
+# based on what user type they are
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
-    if created: 
-        if instance.is_customer:  
+    if created:
+        if instance.is_customer:
             userType = Customer.objects.create(user=instance)
 
         else:
@@ -176,12 +186,15 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
 
 
 class Notification(models.Model):
-    #TODO: determine other notification types if any
+    # TODO: determine other notification types if any
     class NotificationType(models.TextChoices):
         LOW_STOCK = 'LO', _('Low Stock')
         REPORT_READY = 'RE', _('Report Ready')
         OTHER = 'OT', _('Other')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     text = models.CharField(max_length=300)
     created_date = models.DateTimeField(default=timezone.now)
     notification_type = models.CharField(
@@ -189,6 +202,6 @@ class Notification(models.Model):
         choices=NotificationType.choices,
         default=NotificationType.OTHER
     )
-    #TODO: maybe url field?
+    # TODO: maybe url field?
     link = models.CharField(max_length=300)
     seen = models.BooleanField(default=False)

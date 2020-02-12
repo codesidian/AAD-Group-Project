@@ -2,6 +2,25 @@
 {% load static %}
 {% block title %}{{title}}{% endblock title %}}
 {% block page %}
+  <b-button-toolbar class="d-flex flex-row-reverse m-2">
+    <b-button-group>
+      <b-button disabled variant="outline-dark" class="generate-button">
+        Generate:
+      </b-button>
+      <b-button variant="primary" @click="generateSalesReport()">
+        <span class="mdi mdi-file-percent"></span>
+        Sales Report
+      </b-button>
+      <b-button variant="primary" @click="generateReturnsReport()">
+        <span class="mdi mdi-file-restore"></span>
+        Returns Report
+      </b-button>
+      <b-button variant="primary" @click="generateStockReport()">
+        <span class="mdi mdi-file-chart"></span>
+        Stock Report
+      </b-button>
+    </b-button-group>
+  </b-button-toolbar>
   <b-list-group flush>
     <b-list-group-item v-for="report in reports">
       <span v-if="report.type == 'stock'">
@@ -16,8 +35,5 @@
     </b-list-group-item>
   </b-list-group>
 
-        <form action="{% url 'staffmodule-genweeklysales' %}" method="post">
-        {% csrf_token %}
-          <button class="btn btn-primary" type="submit" onclick="">GenSalesReport</button>
-      </form>
+  
 {% endblock page %}
