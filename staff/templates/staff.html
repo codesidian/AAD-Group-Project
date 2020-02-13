@@ -211,6 +211,10 @@
         }
       },
       data: {
+        addNewProductCode: '',
+        addNewProductName: '',
+        addNewProductPrice: '',
+        addNewProductIsChemical: '',
         dateTimeStringFormat: 'Do MMM YYYY, HH:MM:SS',
         /*lowStockProducts: [
           { id: 3, name: 'Isopropyl Alcohol', quantity: 9, warning_quantity: 10 },
@@ -391,15 +395,17 @@
           this.sales = data
         })
 
-        axios.get('/api/items?low_stock').then(({ data }) => {
+        axios.get('/api/items/low_stock').then(({ data }) => {
           this.lowStockProducts = data
         })
 
-        axios.get('/api/sales?today').then(({ data }) => {
+        var today = moment().format('YYYY-MM-DD')
+        var yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD')
+        axios.get('/api/sales?date=' + today).then(({ data }) => {
           this.numSalesToday = data.length
         })
 
-        axios.get('/api/sales?yesterday').then(({ data }) => {
+        axios.get('/api/sales?date=' + yesterday).then(({ data }) => {
           this.numSalesYesterday = data.length
         })
       },
