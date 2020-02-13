@@ -1,7 +1,9 @@
+## The following requirements were added by pip freeze:
 asgiref==3.2.3
 Django==3.0.3
 django-background-tasks==1.2.5
 django-compat==1.0.15
+django-filter==2.2.0
 djangorestframework==3.11.0
 entrypoints==0.3
 et-xmlfile==1.0.1

@@ -4,6 +4,7 @@ from rest_framework.authentication import SessionAuthentication
 
 from .serializers import ItemSerializer, NotificationSerializer, SaleSerializer, SaleItemSerializer, CustomerSerializer
 from .models import Item, Notification, Sale, SaleItem, Customer
+from .filters import SaleFilter
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -41,6 +42,7 @@ class SaleViewSet(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication, ]
     queryset = Sale.objects.all().order_by('id')
     serializer_class = SaleSerializer
+    filterset_class = SaleFilter
 
     @action(detail=False, methods=['put'])
     def make(self, request, pk=None):
