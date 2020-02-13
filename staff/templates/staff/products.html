@@ -82,7 +82,7 @@
     :header-text-variant="'light'"
   >
     <template v-slot:modal-title>Add New Product</template>
-    <form ref="form" @submit.stop.prevent="handleSubmit">
+    <form action="{% url 'staffmodule-addProduct' %}" ref="form" @submit.stop.prevent="handleSubmit">
       <b-form-group
         label="Code"
         label-for="code-input"
@@ -90,6 +90,7 @@
       >
         <b-form-input
           id="code-input"
+          name="code"
           v-model="addNewProductCode"
           required
         ></b-form-input>
@@ -101,6 +102,7 @@
       >
         <b-form-input
           id="name-input"
+          name="name"
           v-model="addNewProductName"
           required
         ></b-form-input>
@@ -112,7 +114,20 @@
       >
         <b-form-input
           id="price-input"
+          name="price"
           v-model="addNewProductPrice"
+          required
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group
+        label="Quantity"
+        label-for="quantity-input"
+        invalid-feedback="Quantity is required"
+      >
+        <b-form-input
+          id="quantity-input"
+          name="quantity"
+          v-model="addNewProductQuantity"
           required
         ></b-form-input>
       </b-form-group>
@@ -123,15 +138,16 @@
       >
         <b-form-input
           id="warning-quantity-input"
-          v-model="addNewProductIsChemical"
+          name="warning_quantity"
+          v-model="addNewProductWarningQuantity"
           required
         ></b-form-input>
       </b-form-group>
       <b-form-group>
         <b-form-checkbox
           id="checkbox-1"
+          name="is_chemical"
           v-model="status"
-          name="is-chemical-input"
           value="true"
           unchecked-value="false"
         >
@@ -145,20 +161,21 @@
       >
         <b-form-input
           id="pack-size-input"
+          name="pack_size"
           v-model="name"
           required
         ></b-form-input>
       </b-form-group>
-      <b-form-group
-        label="For Sale"
-        label-for="for-sale-input"
-        invalid-feedback="For sale is required"
-      >
-        <b-form-input
+      <b-form-group>
+        <b-form-checkbox
           id="for-sale-input"
-          v-model="name"
-          required
-        ></b-form-input>
+          name="for_sale"
+          v-model="status"
+          value="true"
+          unchecked-value="false"
+        >
+          For sale
+        </b-form-checkbox>
       </b-form-group>
     </form>
   </b-modal>
