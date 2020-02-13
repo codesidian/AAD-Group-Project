@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from .models import *
+
 
 class SaleFilter(filters.FilterSet):
     date = filters.DateFilter(field_name='datetime', method='check_date')
