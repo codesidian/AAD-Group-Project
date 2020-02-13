@@ -14,15 +14,18 @@ from django.db.models import F
 
 from datetime import datetime
 
-#MAYBE TODO: 
+
 class ItemViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, ]
-    authentication_classes = [SessionAuthentication, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    authentication_classes = [
+        SessionAuthentication,
+    ]
     queryset = Item.objects.all().order_by('id')
     serializer_class = ItemSerializer
     lookup_field = 'code'
 
-    
     @action(detail=False, methods=['get'])
     def low_stock(self, request):
         query = self.queryset.filter(quantity__lte=F('warning_quantity'))
@@ -31,15 +34,13 @@ class ItemViewSet(viewsets.ModelViewSet):
         return Response(seralizer.data)
 
 
-#TODO: Specific item details
-# receie item code
-
-
-#TODO: Checkout:
-# receive json of basket
 class SaleViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, ]
-    authentication_classes = [SessionAuthentication, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    authentication_classes = [
+        SessionAuthentication,
+    ]
     queryset = Sale.objects.all().order_by('id')
     serializer_class = SaleSerializer
     filterset_class = SaleFilter
@@ -50,7 +51,8 @@ class SaleViewSet(viewsets.ModelViewSet):
         with transaction.atomic():
             sale = Sale()
             try:
-                sale.customer = Customer.objects.get(user_id=self.request.user.id)
+                sale.customer = Customer.objects.get(
+                    user_id=self.request.user.id)
             except Customer.DoesNotExist:
                 return Response(status=403)
             sale.datetime = datetime.today()
@@ -71,36 +73,45 @@ class SaleViewSet(viewsets.ModelViewSet):
                 saleitem.sale_price = dbitem.price
                 saleitem.returned_quantity = 0
                 saleitem.save()
-            
-            seralizer = self.serializer_class(sale, context={'request': request})
+
+            seralizer = self.serializer_class(sale,
+                                              context={'request': request})
 
             return Response(seralizer.data)
 
 
 class SaleItemViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [IsAuthenticated, ]
-    authentication_classes = [SessionAuthentication, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    authentication_classes = [
+        SessionAuthentication,
+    ]
     queryset = SaleItem.objects.all().order_by('id')
     serializer_class = SaleItemSerializer
 
-#MAYBE TODO: get customer details
-
 
 class NotificationViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, ]
-    authentication_classes = [SessionAuthentication, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    authentication_classes = [
+        SessionAuthentication,
+    ]
     serializer_class = NotificationSerializer
     queryset = Notification.objects.all().order_by('created_date')
-    
+
     def list(self, request, *args, **kwargs):
-        data = Notification.objects.filter(user_id=self.request.user.id,seen=False)
+        data = Notification.objects.filter(user_id=self.request.user.id,
+                                           seen=False)
         serializer = NotificationSerializer(data, many=True)
         return Response(serializer.data)
-    
+
     #you can switch the method to get if you want to test using /api/ page
     @action(detail=True, methods=['post'])
     def seen(self, request, pk=None):
-        readNotification = Notification.objects.get(id=pk,user_id=self.request.user.id)
+        readNotification = Notification.objects.get(
+            id=pk, user_id=self.request.user.id)
         if readNotification is not None:
             readNotification.seen = True
             readNotification.save()
@@ -111,7 +122,11 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, ]
-    authentication_classes = [SessionAuthentication, ]
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    authentication_classes = [
+        SessionAuthentication,
+    ]
     serializer_class = CustomerSerializer
     queryset = Customer.objects.all()
