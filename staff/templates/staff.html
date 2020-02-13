@@ -118,13 +118,13 @@
           >
             Sales
           </b-nav-item>
-          <b-nav-item
+          <!--<b-nav-item
             :active="isActive('{% url 'staffmodule-intelligence' %}')"
             :disabled="isActive('{% url 'staffmodule-intelligence' %}')"
             href="{% url 'staffmodule-intelligence' %}"
           >
             Intelligence
-          </b-nav-item>
+          </b-nav-item>-->
           <b-nav-item
             :active="isActive('{% url 'staffmodule-admin' %}')"
             :disabled="isActive('{% url 'staffmodule-admin' %}')"
@@ -212,17 +212,19 @@
       },
       data: {
         dateTimeStringFormat: 'Do MMM YYYY, HH:MM:SS',
-        lowStockProducts: [
+        /*lowStockProducts: [
           { id: 3, name: 'Isopropyl Alcohol', quantity: 9, warning_quantity: 10 },
           { id: 4, name: 'Kingston 16GB SD Card', quantity: 23, warning_quantity: 30 }
         ],
+        */
+        lowStockProducts: [],
         notifications: [
           { id: 1, text: 'A new finance report is ready', link: 'reports' },
           { id: 2, text: 'A new stock report is ready', link: 'reports' },
           { id: 3, text: 'A new order request is ready', link: 'reports' }
         ],
-        numSalesToday: 12,
-        numSalesYesterday: 22,
+        numSalesToday: 0,
+        numSalesYesterday: 0,
         productFields: [
           { key: 'code', sortable: true },
           { key: 'name', sortable: true },
@@ -377,16 +379,28 @@
         }
       },
       beforeCreate: function() {
-        this.products = axios.get('/api/items/').then(({ data }) => {
+        axios.get('/api/items/').then(({ data }) => {
           this.products = data
         })
 
-         this.notifications = axios.get('/api/notifications/').then(({ data }) => {
+        axios.get('/api/notifications/').then(({ data }) => {
           this.notifications = data
         })
 
-        this.sales = axios.get('/api/sales/').then(({ data }) => {
+        axios.get('/api/sales/').then(({ data }) => {
           this.sales = data
+        })
+
+        axios.get('/api/items?low_stock').then(({ data }) => {
+          this.lowStockProducts = data
+        })
+
+        axios.get('/api/sales?today').then(({ data }) => {
+          this.numSalesToday = data.length
+        })
+
+        axios.get('/api/sales?yesterday').then(({ data }) => {
+          this.numSalesYesterday = data.length
         })
       },
       delimiters: ['[[',']]']
