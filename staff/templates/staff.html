@@ -142,6 +142,7 @@
                   <b-badge v-if="notificationsCount > 0" pill variant="danger">[[ notificationsCount ]]</b-badge>
                 </span>
             </template>
+            <template v-if="notifications.length > 0">
             <span v-for="(notification, index) in notifications">
               <b-dropdown-item :href="notification.link">
                 [[ notification.text ]] 
@@ -149,6 +150,12 @@
               </b-dropdown-item> 
               <b-dropdown-divider v-if="index < notificationsCount-1"></b-dropdown-divider>
             </span> 
+            </template>
+            <template v-else>
+                <b-dropdown-item :href="notification.link">
+                You're all caught up!
+              </b-dropdown-item> 
+            </template>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
@@ -198,7 +205,7 @@
         {% endif %}  
       {% endfor %}
     {% endif %}
-
+    
     {% block page %}{% endblock page %}
   </div>
   <script>
@@ -324,7 +331,7 @@
         generateReturnsReport() {
           axios.post("{% url 'staffmodule-genReturnReport' %}")
         },
-
+        
         generateSalesReport() {
           axios.post("{% url 'staffmodule-genSalesReport' %}")
         },
@@ -395,11 +402,11 @@
           this.lowStockProducts = data
         })
 
-        axios.get('/api/sales?today').then(({ data }) => {
+        axios.get('/api/sales/today').then(({ data }) => {
           this.numSalesToday = data.length
         })
 
-        axios.get('/api/sales?yesterday').then(({ data }) => {
+        axios.get('/api/sales/yesterday').then(({ data }) => {
           this.numSalesYesterday = data.length
         })
       },
