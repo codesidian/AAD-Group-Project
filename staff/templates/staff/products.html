@@ -82,9 +82,85 @@
     :header-text-variant="'light'"
   >
     <template v-slot:modal-title>Add New Product</template>
-    <div class="d-block text-center">
-
-    </div>
+    <form ref="form" @submit.stop.prevent="handleSubmit">
+      <b-form-group
+        label="Code"
+        label-for="code-input"
+        invalid-feedback="Code is required"
+      >
+        <b-form-input
+          id="code-input"
+          v-model="addNewProductCode"
+          required
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group
+        label="Name"
+        label-for="name-input"
+        invalid-feedback="Name is required"
+      >
+        <b-form-input
+          id="name-input"
+          v-model="addNewProductName"
+          required
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group
+        label="Price"
+        label-for="price-input"
+        invalid-feedback="Price is required"
+      >
+        <b-form-input
+          id="price-input"
+          v-model="addNewProductPrice"
+          required
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group
+        label="Warning Quantity"
+        label-for="warning-quantity-input"
+        invalid-feedback="Warning quantity is required"
+      >
+        <b-form-input
+          id="warning-quantity-input"
+          v-model="addNewProductIsChemical"
+          required
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group>
+        <b-form-checkbox
+          id="checkbox-1"
+          v-model="status"
+          name="is-chemical-input"
+          value="true"
+          unchecked-value="false"
+        >
+          Is Chemical
+        </b-form-checkbox>
+      </b-form-group>
+      <b-form-group
+        label="Pack Size"
+        label-for="pack-size-input"
+        invalid-feedback="Pack size is required"
+      >
+        <b-form-input
+          id="pack-size-input"
+          v-model="name"
+          required
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group
+        label="For Sale"
+        label-for="for-sale-input"
+        invalid-feedback="For sale is required"
+      >
+        <b-form-input
+          id="for-sale-input"
+          v-model="name"
+          required
+        ></b-form-input>
+      </b-form-group>
+    </form>
   </b-modal>
 
   <b-modal
