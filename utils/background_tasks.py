@@ -26,7 +26,7 @@ def generateSalesReport(userid, fromDate, toDate):
         customer = Customer.objects.get(user_id=sale.customer_id)
         customerName = customer.full_name
         currentRow = [
-            sale.id, sale.datetime, customerName, currentQuantity, currentPrice
+            sale.id, sale.datetime, customerName, currentQuantity, convertToPoundsStr(currentPrice)
         ]
         ws1.append(currentRow)
     # Sheet 2 sales report details
@@ -46,7 +46,7 @@ def generateSalesReport(userid, fromDate, toDate):
             itemDetails = Item.objects.get(id=items.item_id)
             currentRow = [
                 sale.id, itemDetails.code, itemDetails.name, items.quantity,
-                items.sale_price, items.returned_quantity, sale.datetime,
+                convertToPoundsStr(item.items.sale_price), items.returned_quantity, sale.datetime,
                 customer.dept_id, customer.full_name
             ]
             ws2.append(currentRow)
@@ -120,7 +120,7 @@ def generateStockReport(userid, includeChecks, fromDate="", toDate=""):
     ws1.append(headers)
     for item in items:
         currentRow = [
-            item.id, item.code, item.name, (item.price / 100), item.quantity,
+            item.id, item.code, item.name, convertToPoundsStr(item.price), item.quantity,
             item.warning_quantity, item.is_chemical, item.pack_size,
             item.for_sale
         ]
@@ -167,3 +167,6 @@ def resetPasswordEmail(userid):
     # ask for email
     # new pass
     return NotImplementedError
+
+def convertToPoundsStr(value):
+    return '£'+str(value)
