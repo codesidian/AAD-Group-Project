@@ -253,14 +253,15 @@
           { key: 'code' },
           { key: 'name' },
           { key: 'quantity' },
-          { key: 'price_at_sale' },
+          { key: 'sale_price' },
           { key: 'refund', label: '' }
         ],
-        sales: [
+        /*sales: [
           { id: 1, datetime: '2020-01-24T11:06:00+0000', customer_id: 'nigel.king', total: 20.00, items: [
             { code: 'CH01', name: 'Isopropyl Alcohol', quantity: 10, price_at_sale: 2 }
           ]},
-        ],
+        ],*/
+        sales: [],
         selectedEditProductId: 0,
         selectedEditProductCode: '',
         selectedEditProductName: '',
@@ -270,6 +271,7 @@
         selectedEditProductPackSize: '',
         selectedEditProductForSale: '',
         selectedProductQr: '',
+        selectedProductRows: [],
       },
       methods: {
         setNotificationSeen(id) {
@@ -299,6 +301,24 @@
           this.$bvModal.show('bv-modal-product-qr-code')
         },
 
+        generateProductLabelSheet() {
+          if (this.selectedProductRows.length == 0) {
+            this.$bvModal.show("bv-modal-product-label-sheet-select-products")
+          }
+          else {
+            // Construct GET URL of requested labels
+            var codes = '?'
+            this.selectedProductRows.forEach((element, i) => {
+              codes += 'code' + i + '=' + element.code + '&'
+            });
+            window.open("{% url 'staffmodule-genProductLabels' %}" + codes,'_blank')
+          }
+        },
+
+        onRowSelected(items) {
+          this.selectedProductRows = items
+        },
+
         generateReturnsReport() {
           axios.post("{% url 'staffmodule-genReturnReport' %}")
         },
@@ -324,7 +344,7 @@
         },
 
         saleNumberOfItems(col) {
-          var items = this.sales[col.index].items
+          var items = this.sales[col.index].saleitem_set
           var numOfItems = 0
           items.forEach(item => {
             numOfItems += item.quantity
@@ -333,7 +353,7 @@
         },
 
         formatAsCurrency(val) {
-          return '£' + val.toString().replace(/\d(?=(\d{3})+\.)/g, '$&,')
+          return '£' + ((Number(val/100)||0).toFixed(2))
         },
 
         refundSaleItem(id) {
@@ -357,15 +377,17 @@
         }
       },
       beforeCreate: function() {
-
         this.products = axios.get('/api/items/').then(({ data }) => {
           this.products = data
-        });
+        })
 
          this.notifications = axios.get('/api/notifications/').then(({ data }) => {
           this.notifications = data
-        });
-        
+        })
+
+        this.sales = axios.get('/api/sales/').then(({ data }) => {
+          this.sales = data
+        })
       },
       delimiters: ['[[',']]']
     })

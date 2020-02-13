@@ -12,5 +12,6 @@ urlpatterns = [
     path('createstaff', views.createStaff, name="staffmodule-createStaff"),
     path('genSalesReport',views.genSalesReport, name="staffmodule-genSalesReport"),
     path('genReturnReport',views.genReturnReport, name="staffmodule-genReturnReport"),
-    path('genStockReport',views.genStockReport, name="staffmodule-genStockReport")
+    path('genStockReport',views.genStockReport, name="staffmodule-genStockReport"),
+    path('genProductLabels', views.genProductLabels, name="staffmodule-genProductLabels")
 ]

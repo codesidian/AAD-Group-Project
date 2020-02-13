@@ -1,13 +1,15 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
-from api.models import Department, Customer, User, Staff
+from api.models import Department, Customer, User, Staff, Item
 from django.contrib import messages
 from django.db import transaction
 from utils.decorators import staff_required, basic_required, manager_required
 from utils.background_tasks import generateSalesReport, generateReturnsReport, generateStockReport
 from django.utils import timezone
 from datetime import timedelta
+import pyqrcode
+import io
 
 @login_required
 def home(HttpRequest):
@@ -136,3 +138,21 @@ def genStockReport(HttpRequest):
     toDate = timezone.now() 
     generateStockReport(HttpRequest.user.id,True,str(fromDate),str(toDate))
     return HttpResponseRedirect("reports")
+
+
+@login_required
+def genProductLabels(HttpRequest):
+    if HttpRequest.method == 'GET':
+        r = HttpRequest
+        codes = r.GET.dict().values()
+        items = []
+        for code in codes:
+            buffer = io.BytesIO()
+            qr = pyqrcode.create(code)
+            qr.svg(buffer, scale=7)
+            itemDict = Item.objects.get(code=code).__dict__
+            itemDict['price'] = "£{:.2f}".format(itemDict['price']/100)
+            itemDict['qr'] = buffer.getvalue().decode('UTF-8')
+            items.append(itemDict)
+        context = {'items': items}
+        return render(HttpRequest, 'staff/labels.html', context)

@@ -18,6 +18,7 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
         )
         lookup_field = 'code'
 
+
 class NotificationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Notification
@@ -54,5 +55,6 @@ class SaleSerializer(serializers.HyperlinkedModelSerializer):
             'id',
             'datetime',
             #'customer',
+            'customer_id',
             'saleitem_set',
         )

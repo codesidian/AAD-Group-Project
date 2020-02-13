@@ -44,11 +44,11 @@
         responsive
         hover
         :fields="saleItemsFields"
-        :items="row.item.items"
+        :items="row.item.saleitem_set"
         :primary-key="'id'"
       >
         <!-- Format price integer as currency -->
-        <template v-slot:cell(price_at_sale)="data">
+        <template v-slot:cell(sale_price)="data">
           [[ formatAsCurrency(data.value) ]]
         </template>
         <!-- Edit button per item -->
