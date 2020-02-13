@@ -7,7 +7,7 @@ from django.utils import timezone
 
 REPORT_DIR = "staff/reports/"
 
-@background(schedule=60)
+@background(schedule=10)
 def generateSalesReport(userid, fromDate, toDate):
     periodOfSales = Sale.objects.filter(datetime__range=[fromDate, toDate])
     headers = ['ID', 'Date', 'Customer Name', 'Quantity', 'Price']
@@ -67,7 +67,7 @@ def generateSalesReport(userid, fromDate, toDate):
     notify.save()
     
 
-@background(schedule=60)
+@background(schedule=10)
 def generateReturnsReport(userid, fromDate, toDate):
     periodOfReturns = Return.objects.filter(datetime__range=[fromDate, toDate])
     headers = [
@@ -107,7 +107,7 @@ def generateReturnsReport(userid, fromDate, toDate):
 
 
 # We can take a bool for if to include a second sheet for stockchecks.
-@background(schedule=60)
+@background(schedule=10)
 def generateStockReport(userid, includeChecks, fromDate="", toDate=""):
     items = Item.objects.all()
     headers = [
