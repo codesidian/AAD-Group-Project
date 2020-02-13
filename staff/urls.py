@@ -17,4 +17,5 @@ urlpatterns = [
     path('genProductLabels', views.genProductLabels, name="staffmodule-genProductLabels"),
     path('purgeReports', views.purgeReports, name="staffmodule-purgeReports"),
     path('addProduct', views.addProduct, name='staffmodule-addProduct'),
+    path('modifyProduct', views.modifyProduct, name='staffmodule-modifyProduct'),
 ]

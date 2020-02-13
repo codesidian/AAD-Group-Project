@@ -217,5 +217,37 @@ def addProduct(request: HttpRequest):
     item.for_sale = len(for_sale) == 1
 
     item.save()
-    messages.success(HttpRequest, 'Product: '+name+' added successfully.')
+    messages.success(request, 'Product: '+name+' added successfully.')
+    return HttpResponseRedirect('products')
+
+
+@login_required
+def modifyProduct(request: HttpRequest):
+    id = request.POST['id']
+    code = request.POST['code']
+    name = request.POST['name']
+    price = request.POST['price']
+    quantity = request.POST['quantity']
+    warning_quantity = request.POST['warning_quantity']
+    is_chemical = request.POST['is_chemical']
+    pack_size = request.POST['pack_size']
+    for_sale = request.POST['for_sale']
+
+    item = None
+    try:
+        item = Item.objects.get(id=id)
+    except Item.NotFound:
+        return HttpResponse(status=404)
+
+    item.code = code[0]
+    item.name = name[0]
+    item.price = int(float(price[0]) * 100)
+    item.quantity = int(quantity[0])
+    item.warning_quantity = int(warning_quantity[0])
+    item.is_chemical = len(is_chemical) == 1
+    item.pack_size = int(pack_size[0])
+    item.for_sale = len(for_sale) == 1
+    
+    item.save()
+    messages.success(request, 'Product: '+name+' changed successfully.')
     return HttpResponseRedirect('products')
