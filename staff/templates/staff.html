@@ -405,7 +405,7 @@
           this.numSalesToday = data.length
         })
 
-        axios.get('/api/sales?date=2020-02-12').then(({ data }) => {
+        axios.get('/api/sales?date=' + yesterday).then(({ data }) => {
           this.numSalesYesterday = data.length
         })
       },
