@@ -35,6 +35,7 @@ class NotificationSerializer(serializers.HyperlinkedModelSerializer):
 
 class SaleItemSerializer(serializers.HyperlinkedModelSerializer):
     item = serializers.SlugRelatedField(queryset=Item.objects.all(), slug_field='code')
+    item_name = serializers.StringRelatedField(source='item')
 
     class Meta:
         model = SaleItem
@@ -43,11 +44,13 @@ class SaleItemSerializer(serializers.HyperlinkedModelSerializer):
             'sale_price',
             'quantity',
             'returned_quantity',
+            'item_name',
         )
 
 
 class SaleSerializer(serializers.HyperlinkedModelSerializer):
     saleitem_set = SaleItemSerializer(many=True)
+    customer = serializers.StringRelatedField()
 
     class Meta:
         model = Sale
