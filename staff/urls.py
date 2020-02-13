@@ -15,5 +15,6 @@ urlpatterns = [
     path('genReturnReport',views.genReturnReport, name="staffmodule-genReturnReport"),
     path('genStockReport',views.genStockReport, name="staffmodule-genStockReport"),
     path('genProductLabels', views.genProductLabels, name="staffmodule-genProductLabels"),
+    path('purgeReports', views.purgeReports, name="staffmodule-purgeReports"),
     path('addProduct', views.addProduct, name='staffmodule-addProduct'),
 ]

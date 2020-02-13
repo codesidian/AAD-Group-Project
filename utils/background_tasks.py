@@ -57,7 +57,7 @@ def generateSalesReport(userid, fromDate, toDate):
     report = Report(user_id=userid,
                 filename=filename,
                 created_date=timezone.now(),
-                report_type="ST")
+                report_type="SA")
     report.save()    
     notify = Notification(user_id=userid,
                           text=reportMessage,
@@ -96,7 +96,7 @@ def generateReturnsReport(userid, fromDate, toDate):
     report = Report(user_id=userid,
                     filename=filename,
                     created_date=timezone.now(),
-                    report_type="ST")
+                    report_type="RE")
     report.save()
     notify = Notification(user_id=userid,
                           text=reportMessage,

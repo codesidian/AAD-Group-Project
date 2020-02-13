@@ -240,11 +240,7 @@
         ],
         */
         lowStockProducts: [],
-        notifications: [
-          { id: 1, text: 'A new finance report is ready', link: 'reports' },
-          { id: 2, text: 'A new stock report is ready', link: 'reports' },
-          { id: 3, text: 'A new order request is ready', link: 'reports' }
-        ],
+        notifications: [],
         numSalesToday: 0,
         numSalesYesterday: 0,
         productFields: [
@@ -259,12 +255,7 @@
           { key: 'buttons', label: '' }
         ],
         products: [],
-        reports: [
-          { id: 4, type: 'stock', datetime: '2020-01-24T15:32:00+0000' },
-          { id: 3, type: 'finance', datetime: '2020-01-24T00:00:00+0000' },
-          { id: 2, type: 'finance', datetime: '2020-01-22T00:00:00+0000' },
-          { id: 1, type: 'stock', datetime: '2020-01-21T11:05:00+0000' }
-        ],
+        reports: [],
         saleFields: [
           { key: 'id', sortable: true, label: 'No.' },
           { key: 'datetime', sortable: true },
@@ -342,6 +333,10 @@
         onRowSelected(items) {
           this.selectedProductRows = items
         },
+        purgeReports() {
+          axios.post("{% url 'staffmodule-purgeReports' %}")
+          location.reload();
+        },
 
         generateReturnsReport() {
           this.$bvModal.show('bv-modal-report-submitted')
@@ -412,6 +407,7 @@
           this.notifications = data
         })
         axios.get('/api/reports/').then(({ data }) => {
+          console.log(data)
           this.reports = data
         })
         axios.get('/api/sales/').then(({ data }) => {

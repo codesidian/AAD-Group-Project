@@ -66,7 +66,6 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
         model = Report
         fields = (
             'id',
-            'user_id',
             'filename',
             'report_type',
             'created_date'

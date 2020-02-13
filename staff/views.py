@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
-from api.models import Department, Customer, User, Staff, Item
+from api.models import Department, Customer, User, Staff, Item, Report, Notification
 from django.contrib import messages
 from django.db import transaction
 from utils.decorators import staff_required, basic_required, manager_required
@@ -162,9 +162,12 @@ def genProductLabels(HttpRequest):
 @login_required
 @manager_required
 def purgeReports(HttpRequest):
-    Report.objects.all().delete()
-    Notification.objects.all().delete()
-    return HttpResponseRedirect("reports")
+    if HttpRequest.method == 'POST':
+        Report.objects.all().delete()
+        Notification.objects.all().delete()
+        return HttpResponseRedirect("reports")
+    else:
+        return HttpResponseRedirect("reports")
     
     
 
