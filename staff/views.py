@@ -11,6 +11,7 @@ from datetime import timedelta
 import pyqrcode
 import io
 
+
 @login_required
 def home(HttpRequest):
 
@@ -124,6 +125,7 @@ def createStaff(HttpRequest):
 def genSalesReport(HttpRequest):
     fromDate = timezone.now() - timedelta(days=7)
     toDate = timezone.now() 
+    
     generateSalesReport(HttpRequest.user.id,str(fromDate),str(toDate))
     return HttpResponseRedirect("reports")
 

@@ -11,8 +11,9 @@ from rest_framework.response import Response
 
 from django.db import transaction
 from django.db.models import F
-
-from datetime import datetime
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
+from datetime import datetime, timedelta
 
 
 class ItemViewSet(viewsets.ModelViewSet):
@@ -32,7 +33,7 @@ class ItemViewSet(viewsets.ModelViewSet):
         query = self.filter_queryset(query)
         seralizer = self.get_serializer(query, many=True)
         return Response(seralizer.data)
-
+    
 
 class SaleViewSet(viewsets.ModelViewSet):
     permission_classes = [
@@ -79,7 +80,27 @@ class SaleViewSet(viewsets.ModelViewSet):
 
             return Response(seralizer.data)
 
-
+    @action(detail=False, methods=['get'])
+    def today(self, request):
+        today = timezone.now()
+        query = self.queryset.filter(datetime__year=today.year,datetime__month=today.month,datetime__day=today.day)
+        seralizer = self.get_serializer(query, many=True)
+        return Response(seralizer.data)
+    
+    @action(detail=False, methods=['get'])
+    def yesterday(self, request):
+        yesterday = timezone.now() - timedelta(days=1)
+        query = self.queryset.filter(datetime__year=yesterday.year,datetime__month=yesterday.month,datetime__day=yesterday.day)
+        seralizer = self.get_serializer(query, many=True)
+        return Response(seralizer.data)
+    
+    # def get_queryset(self):
+    #     filterDate = self.request.query_params.get('filterdate', None)
+    #     dtFilterDate = parse_datetime(filterDate)
+    #     if dtFilterDate is not None:
+    #         queryset = queryset.filter(datetime__year=dtFilterDate.year,datetime__month=dtFilterDate.month,datetime__day=dtFilterDate.day)
+    #     return queryset
+    
 class SaleItemViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [
         IsAuthenticated,

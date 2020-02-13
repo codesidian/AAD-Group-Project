@@ -3,6 +3,7 @@ from django.conf import settings
 from api.models import Notification, Sale, SaleItem, Item, Customer, Return, Staff, StockCheck, StockCheckItem
 from openpyxl import Workbook
 import uuid
+from django.utils import timezone
 
 
 @background(schedule=60)
@@ -48,17 +49,15 @@ def generateSalesReport(userid, fromDate, toDate):
                 customer.dept_id, customer.full_name
             ]
             ws2.append(currentRow)
-    wb.save("Sales_Report" + str(uuid.uuid4()) + ".xlsx")
-
-    reportMessage = "Sales Report Ready"
-
+    wb.save("Sales_Report"+str(timezone.now().strftime("%Y%m%d-%H%M%S"))+".xlsx")
+    
+    reportMessage="Sales Report Ready"
     notify = Notification(user_id=userid,
                           text=reportMessage,
                           notification_type="RE",
                           link="NotImplemented",
                           seen=False)
-    notify.save()
-
+    wb.save("Sales_Report" + str(uuid.uuid4()) + ".xlsx")
 
 @background(schedule=60)
 def generateReturnsReport(userid, fromDate, toDate):
@@ -82,8 +81,8 @@ def generateReturnsReport(userid, fromDate, toDate):
             staff.full_name, ret.quantity, ret.reason, ret.datetime
         ]
         ws1.append(currentRow)
-    wb.save("Return_Report" + str(uuid.uuid4()) + ".xlsx")
-    reportMessage = "Return Report Ready"
+    wb.save("Return_Report"+str(timezone.now().strftime("%Y%m%d-%H%M%S"))+".xlsx")
+    reportMessage="Return Report Ready"
 
     notify = Notification(user_id=userid,
                           text=reportMessage,
@@ -133,9 +132,8 @@ def generateStockReport(userid, includeChecks, fromDate="", toDate=""):
                 checkedItem.expected_quantity, itemDetails.warning_quantity
             ]
             ws2.append(currentRow)
-
-    wb.save("Stock_Report" + str(uuid.uuid4()) + ".xlsx")
-    reportMessage = "Stock Report Ready"
+    wb.save("Stock_Report"+str(timezone.now().strftime("%Y%m%d-%H%M%S"))+".xlsx")
+    reportMessage="Stock Report Ready"
 
     notify = Notification(user_id=userid,
                           text=reportMessage,
