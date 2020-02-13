@@ -1,16 +1,21 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
-from api.models import Department, Customer, User, Staff, Item, Report, Notification
-from django.contrib import messages
-from django.db import transaction
-from utils.decorators import staff_required, basic_required, manager_required
-from utils.background_tasks import generateSalesReport, generateReturnsReport, generateStockReport
-from django.utils import timezone
-from datetime import timedelta
-import pyqrcode
 import io
 import os
+import pyqrcode
+
+from datetime import timedelta
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
+from django.contrib import messages
+from django.db import transaction
+from django.utils import timezone
+
+from api.models import Department, Customer, User, Staff, Item, Report, Notification
+from utils.decorators import staff_required, basic_required, manager_required
+from utils.background_tasks import generateSalesReport, generateReturnsReport, generateStockReport
+
+
 
 
 @login_required
@@ -32,9 +37,6 @@ def reports(HttpRequest,id=0):
         print(filename)
         if filename:
             file_path = 'staff/reports/'+filename
-            print(file_path)
-            print(os.path.exists(file_path))
-            print(os.path.abspath(os.getcwd()))
             if os.path.exists(file_path):
                 with open(file_path, 'rb') as fh:
                     response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
@@ -251,3 +253,4 @@ def modifyProduct(request: HttpRequest):
     item.save()
     messages.success(request, 'Product: '+name+' changed successfully.')
     return HttpResponseRedirect('products')
+
