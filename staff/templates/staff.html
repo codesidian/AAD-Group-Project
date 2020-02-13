@@ -344,14 +344,17 @@
         },
 
         generateReturnsReport() {
+          this.$bvModal.show('bv-modal-report-submitted')
           axios.post("{% url 'staffmodule-genReturnReport' %}")
         },
         
         generateSalesReport() {
+          this.$bvModal.show('bv-modal-report-submitted')
           axios.post("{% url 'staffmodule-genSalesReport' %}")
         },
 
         generateStockReport() {
+          this.$bvModal.show('bv-modal-report-submitted')
           axios.post("{% url 'staffmodule-genStockReport' %}")
         },
 

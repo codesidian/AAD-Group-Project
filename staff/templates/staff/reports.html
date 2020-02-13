@@ -49,6 +49,19 @@ window.onload = function () {
 
     </b-list-group-item>
   </b-list-group>
-
+  
+  <b-modal
+    id="bv-modal-report-submitted"
+    centered
+    :header-bg-variant="'primary'"
+    :header-text-variant="'light'"
+  >
+    <template v-slot:modal-title>
+      Report Submitted!
+    </template>
+    <div class="d-block text-center">
+      <div>Wait a few minutes for it to generate and you'll receive a notification soon.</div>
+    </div>
+  </b-modal>
   
 {% endblock page %}
