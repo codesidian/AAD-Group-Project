@@ -2,14 +2,14 @@
 {% load static %}
 {% block title %}{{title}}{% endblock title %}}
 {% block page %}
-  <b-button-toolbar class="d-flex flex-row-reverse m-2">
+  <!--<b-button-toolbar class="d-flex flex-row-reverse m-2">
     <b-button-group>
       <b-button variant="primary" @click="filterProductsList()">
         <span class="mdi mdi-filter"></span>
         Filter
       </b-button>
     </b-button-group>
-  </b-button-toolbar>
+  </b-button-toolbar>-->
   <b-table
     striped
     responsive
@@ -44,11 +44,11 @@
         responsive
         hover
         :fields="saleItemsFields"
-        :items="row.item.items"
+        :items="row.item.saleitem_set"
         :primary-key="'id'"
       >
         <!-- Format price integer as currency -->
-        <template v-slot:cell(price_at_sale)="data">
+        <template v-slot:cell(sale_price)="data">
           [[ formatAsCurrency(data.value) ]]
         </template>
         <!-- Edit button per item -->

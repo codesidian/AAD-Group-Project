@@ -2,30 +2,26 @@
 {% load static %}
 {% block title %}{{title}}{% endblock title %}}
 {% block page %}
-
-
-<div class="row">
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Create Customer</h5>
-        <p class="card-text">Create a new user account of type customer.</p>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#creatCustomerModal">Create Customer</button>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Create Staff</h5>
-        <p class="card-text">Create a new user account of type staff.</p>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createStaffModal">Create Staff</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
+  <b-container fluid>
+    <b-row class="my-3">
+      <b-col class="mb-lg-0 mb-3 col-lg-6 col-12">
+        <b-card header="Create Customer" header-bg-variant="light">
+          <b-card-text>
+            Create a new user account of type customer.
+          </b-card-text>
+          <b-button variant="primary" @click="showCreateCustomerModal()" data-toggle="modal" data-target="#creatCustomerModal">Create Customer</b-button>
+        </b-card>
+      </b-col>
+      <b-col class="mb-lg-0 mb-3 col-lg-6 col-12">
+        <b-card header="Create Staff" header-bg-variant="light">
+          <b-card-text>
+            Create a new user account of type staff.
+          </b-card-text>
+          <b-button variant="primary" @click="showCreateStaffModal()" data-toggle="modal" data-target="#createStaffModal">Create Staff</b-button>
+        </b-card>
+      </b-col>
+    </b-row>
+  </b-container>
 
 <!-- Create Customer Modal -->
 <div class="modal fade" id="creatCustomerModal" tabindex="-1" role="dialog" aria-labelledby="creatCustomerModal" aria-hidden="true">

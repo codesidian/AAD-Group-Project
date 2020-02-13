@@ -8,19 +8,26 @@
         <span class="mdi mdi-plus-thick"></span>
         Add New Product
       </b-button>
-      <b-button variant="primary" @click="filterProductsList()">
+      <!--<b-button variant="primary" @click="filterProductsList()">
         <span class="mdi mdi-filter"></span>
         Filter
+      </b-button>-->
+      <b-button variant="primary" @click="generateProductLabelSheet()">
+        <span class="mdi mdi-label"></span>
+        Generate Label Sheet
       </b-button>
     </b-button-group>
   </b-button-toolbar>
   <b-table
+    selectable
     striped
     responsive
     hover
     :fields="productFields"
     :items="products"
     :primary-key="'id'"
+    ref="productsTable"
+    @row-selected="onRowSelected"
   >
     <!-- Format price integer as currency -->
     <template v-slot:cell(price)="data">
@@ -36,11 +43,15 @@
       <span v-if="data.value" class="mdi mdi-check"></span>
       <span v-if="!data.value" class="mdi mdi-close"></span>
     </template>
-    <!-- Edit button per item -->
-    <template v-slot:cell(edit)="row">
+    <!-- Buttons per item -->
+    <template v-slot:cell(buttons)="row">
       <b-button size="sm" @click="editProduct(row.item.id)" class="mr-2" variant="primary">
         <span class="mdi mdi-pencil"></span>
         Edit
+      </b-button>
+      <b-button size="sm" @click="generateProductQR(row.item.id)" class="mr-2" variant="primary">
+        <span class="mdi mdi-qrcode"></span>
+        Show QR
       </b-button>
     </template>
   </b-table>
@@ -86,5 +97,32 @@
     <div class="d-block text-center">
 
     </div>
+  </b-modal>
+
+  <b-modal
+    id="bv-modal-product-qr-code"
+    centered
+    :header-bg-variant="'primary'"
+    :header-text-variant="'light'"
+  >
+    <template v-slot:modal-title>QR Code</template>
+    <div class="d-block text-center">
+      <span id="selectedProductQrContainer" v-html="selectedProductQr"></span>
+    </div>
+  </b-modal>
+
+  <b-modal
+    id="bv-modal-product-label-sheet-select-products"
+    centered
+    :header-bg-variant="'warning'"
+    :header-text-variant="'dark'"
+  >
+    <template v-slot:modal-title>No Products Selected</template>
+    <div class="d-block text-center">
+      Select some products by clicking on their rows.
+    </div>
+    <template v-slot:modal-footer="{ ok }">
+      <b-button variant="warning" @click="ok()">OK</b-button>
+    </template>
   </b-modal>
 {% endblock page %}

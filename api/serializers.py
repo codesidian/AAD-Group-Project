@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Item, Notification
+from .models import Item, Notification, Sale, SaleItem, Customer
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,6 +16,8 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
             'pack_size',
             'for_sale'
         )
+        lookup_field = 'code'
+
 
 class NotificationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -28,4 +30,47 @@ class NotificationSerializer(serializers.HyperlinkedModelSerializer):
             'notification_type',
             'link',
             'seen'
+        )
+
+
+class SaleItemSerializer(serializers.HyperlinkedModelSerializer):
+    item = serializers.SlugRelatedField(queryset=Item.objects.all(), slug_field='code')
+    item_name = serializers.StringRelatedField(source='item')
+
+    class Meta:
+        model = SaleItem
+        fields = (
+            'item',
+            'sale_price',
+            'quantity',
+            'returned_quantity',
+            'item_name',
+        )
+
+
+class SaleSerializer(serializers.HyperlinkedModelSerializer):
+    saleitem_set = SaleItemSerializer(many=True)
+    customer = serializers.StringRelatedField()
+
+    class Meta:
+        model = Sale
+        fields = (
+            'id',
+            'datetime',
+            'customer',
+            'customer_id',
+            'saleitem_set',
+        )
+
+
+class CustomerSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Customer
+        fields = (
+            'user_id',
+            'first_name',
+            'last_name',
+            'charge_code',
+            'pays_vat',
+            'allowed_chemicals',
         )

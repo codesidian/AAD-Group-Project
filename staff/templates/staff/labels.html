@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <style type="text/css">
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+
+      .container-label {
+        align-items: center;
+        border: 1px dashed black;
+        box-sizing: border-box;
+        display: flex;
+        margin: 0;
+        width: 100%;
+      }
+
+      .container-label-right {
+        padding: 5px;
+      }
+
+      .container-label-right-name {
+        font-size: 40px;
+      }
+
+      .container-label-right-price {
+        font-size: 30px;
+      }
+
+      .container-label-right-code {
+        font-size: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      {% for item in items %}
+      <div class="container-label">
+        <div class="container-label-left">
+          <div class="container-label-left-qrcode">
+            {{ item.qr|safe }}
+          </div>
+        </div>
+        <div class="container-label-right">
+          <div class="container-label-right-name">{{ item.name }}</div>
+          <div class="container-label-right-price">{{ item.price }}</div>
+          <div class="container-label-right-code">{{ item.code }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>

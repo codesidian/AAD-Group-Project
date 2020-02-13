@@ -35,6 +35,12 @@ class Customer(models.Model):
     @property
     def full_name(self):
         return '%s %s' % (self.first_name, self.last_name)
+    
+    def __str__(self):
+        return '%s %s' % (self.first_name, self.last_name)
+    
+    def __repr__(self):
+        return '<Customer %r>' % self.user_id
 
 
 class Department(models.Model):
@@ -43,6 +49,12 @@ class Department(models.Model):
       'Customer',
       on_delete=models.PROTECT
     )
+    
+    def __str__(self):
+        return self.name
+    
+    def __repr__(self):
+        return '<Department %r name=%r>' % (self.id, self.name)
 
 
 class Item(models.Model):
@@ -55,6 +67,12 @@ class Item(models.Model):
     is_chemical = models.BooleanField()
     pack_size = models.PositiveSmallIntegerField()
     for_sale = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.name
+    
+    def __repr__(self):
+        return '<Item %r name=%r code=%r>' % (self.id, self.name, self.code)
 
 
 class Order(models.Model):
@@ -78,7 +96,6 @@ class Order(models.Model):
         choices=OrderStatus.choices,
         default=OrderStatus.TO_ORDER
     )
-
 
 class Return(models.Model):
     class ReturnReason(models.TextChoices):
@@ -123,7 +140,7 @@ class SaleItem(models.Model):
         'Item',
         on_delete=models.PROTECT
     )
-    sale_price = models.DecimalField(max_digits=3, decimal_places=2)
+    sale_price = models.IntegerField()
     quantity = models.PositiveIntegerField()
     returned_quantity = models.PositiveIntegerField()
 
