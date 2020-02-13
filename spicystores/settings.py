@@ -34,7 +34,7 @@ STATICFILES_FINDERS = [
 ]
 STATICFILES_DIRS = [
     'spicystores/static',
-    'staff/static'
+    'staff/static',
 ]
 
 # Application definition
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'staff',
     'store',
     'api',
+    'utils',
     'rest_framework',
     'django_filters',
 ]

@@ -25,6 +25,7 @@ class SaleItemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SaleItem
         fields = (
+            'id',
             'item',
             'sale_price',
             'quantity',
