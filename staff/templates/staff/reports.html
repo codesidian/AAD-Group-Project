@@ -46,7 +46,7 @@
       </span>
 
       [[ moment(report.created_date).format(dateTimeStringFormat) ]]
-      <a :href="report.filename" class="mdi mdi-download" download></a>
+      <a :href="'?filename='+report.filename" class="mdi mdi-download" ></a>
 
     </b-list-group-item>
   </b-list-group>

@@ -43,7 +43,10 @@ class ReportViewSet(viewsets.ModelViewSet):
     ]
     queryset = Report.objects.all().order_by('id')
     serializer_class = ReportSerializer
-
+    # def delete(self, request, pk):
+    #     qs = self.queryset.objects.get(pk)
+    #     qs.delete()
+    #     return Response(status=200)
     
 class SaleViewSet(viewsets.ModelViewSet):
     permission_classes = [

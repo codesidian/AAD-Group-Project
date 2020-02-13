@@ -10,6 +10,7 @@ from django.utils import timezone
 from datetime import timedelta
 import pyqrcode
 import io
+import os
 
 
 @login_required
@@ -26,8 +27,24 @@ def products(HttpRequest):
 
 @login_required
 def reports(HttpRequest,id=0):
-    context = {'title': 'Reports'}
-    return render(HttpRequest, 'staff/reports.html', context)
+    if HttpRequest.method == 'GET':
+        filename = HttpRequest.GET.get('filename')
+        print(filename)
+        if filename:
+            file_path = 'staff/reports/'+filename
+            print(file_path)
+            print(os.path.exists(file_path))
+            print(os.path.abspath(os.getcwd()))
+            if os.path.exists(file_path):
+                with open(file_path, 'rb') as fh:
+                    response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+                    response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+                    return response
+            messages.error(HttpRequest, 'File not found.')
+            return HttpResponseRedirect("reports")
+        else:
+            context = {'title': 'Reports'}
+            return render(HttpRequest, 'staff/reports.html', context)
 
 @login_required
 def sales(HttpRequest):
@@ -127,18 +144,21 @@ def genSalesReport(HttpRequest):
     toDate = timezone.now() 
     
     generateSalesReport(HttpRequest.user.id,str(fromDate),str(toDate))
+    messages.success(HttpRequest, 'Sales report submitted.')
     return HttpResponseRedirect("reports")
 
 def genReturnReport(HttpRequest):
     fromDate = timezone.now() - timedelta(days=7)
     toDate = timezone.now() 
     generateReturnsReport(HttpRequest.user.id,str(fromDate),str(toDate))
+    messages.success(HttpRequest, 'Return report submitted.')
     return HttpResponseRedirect("reports")
 
 def genStockReport(HttpRequest):
     fromDate = timezone.now() - timedelta(days=7)
     toDate = timezone.now() 
     generateStockReport(HttpRequest.user.id,True,str(fromDate),str(toDate))
+    messages.success(HttpRequest, 'Stock report submitted.')
     return HttpResponseRedirect("reports")
 
 
@@ -163,13 +183,17 @@ def genProductLabels(HttpRequest):
 @manager_required
 def purgeReports(HttpRequest):
     if HttpRequest.method == 'POST':
-        Report.objects.all().delete()
-        Notification.objects.all().delete()
-        return HttpResponseRedirect("reports")
+        try:
+            Report.objects.all().delete()
+            Notification.objects.all().delete()
+            messages.success(HttpRequest, 'Reports purged successfully.')
+            return HttpResponseRedirect("reports")
+        except:
+            messages.error(HttpRequest, 'Unable to purge reports. Please try again.')
+            return HttpResponseRedirect("reports")
     else:
         return HttpResponseRedirect("reports")
-    
-    
+
 
 @login_required
 def addProduct(request: HttpRequest):
@@ -193,5 +217,5 @@ def addProduct(request: HttpRequest):
     item.for_sale = len(for_sale) == 1
 
     item.save()
-
+    messages.success(HttpRequest, 'Product: '+name+' added successfully.')
     return HttpResponseRedirect('products')
