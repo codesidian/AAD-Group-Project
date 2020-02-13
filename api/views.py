@@ -9,6 +9,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from django.db import transaction
+from django.db.models import F
 
 from datetime import datetime
 
@@ -19,6 +20,15 @@ class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all().order_by('id')
     serializer_class = ItemSerializer
     lookup_field = 'code'
+
+    
+    @action(detail=False, methods=['get'])
+    def low_stock(self, request):
+        query = self.queryset.filter(quantity__lte=F('warning_quantity'))
+        query = self.filter_queryset(query)
+        seralizer = self.get_serializer(query, many=True)
+        return Response(seralizer.data)
+
 
 #TODO: Specific item details
 # receie item code
