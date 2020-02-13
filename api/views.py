@@ -2,7 +2,7 @@ from rest_framework import viewsets, mixins, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 
-from .serializers import ItemSerializer, NotificationSerializer, SaleSerializer, SaleItemSerializer
+from .serializers import ItemSerializer, NotificationSerializer, SaleSerializer, SaleItemSerializer, CustomerSerializer
 from .models import Item, Notification, Sale, SaleItem, Customer
 
 from rest_framework.decorators import action
@@ -97,4 +97,9 @@ class NotificationViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors)
 
-#TODO: 
+
+class CustomerViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    authentication_classes = [SessionAuthentication, ]
+    serializer_class = CustomerSerializer
+    queryset = Customer.objects.all()

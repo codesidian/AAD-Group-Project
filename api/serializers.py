@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Item, Notification, Sale, SaleItem
+from .models import Item, Notification, Sale, SaleItem, Customer
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
@@ -54,7 +54,20 @@ class SaleSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'id',
             'datetime',
-            #'customer',
+            'customer',
             'customer_id',
             'saleitem_set',
+        )
+
+
+class CustomerSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Customer
+        fields = (
+            'user_id',
+            'first_name',
+            'last_name',
+            'charge_code',
+            'pays_vat',
+            'allowed_chemicals',
         )
