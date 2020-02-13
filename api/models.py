@@ -168,6 +168,20 @@ class Notification(models.Model):
     notification_type = models.CharField(max_length=2,
                                          choices=NotificationType.choices,
                                          default=NotificationType.OTHER)
-    # TODO: maybe url field?
     link = models.CharField(max_length=300)
     seen = models.BooleanField(default=False)
+    
+class Report(models.Model):
+    class ReportType(models.TextChoices):
+        SALES = 'SA', _('Sales Report')
+        STOCK = 'ST', _('Stock Report')
+        RETURNS = 'RE', _('Return Report')
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    filename = models.CharField(max_length=300)
+    created_date = models.DateTimeField(default=timezone.now)
+    report_type = models.CharField(max_length=2,
+                                         choices=ReportType.choices,
+                                         default=ReportType.STOCK)
+

@@ -8,6 +8,7 @@ router.register(r'notifications', views.NotificationViewSet, basename="notificat
 router.register(r'sales', views.SaleViewSet)
 router.register(r'sale_items', views.SaleItemViewSet)
 router.register(r'customers', views.CustomerViewSet)
+router.register(r'reports', views.ReportViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

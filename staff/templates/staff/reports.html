@@ -2,6 +2,16 @@
 {% load static %}
 {% block title %}{{title}}{% endblock title %}}
 {% block page %}
+<script>
+window.onload = function () {
+    var rid = getUrlVars()["id"];
+    if (typeof rid !== 'undefined'){
+      var report = document.getElementById('reportid'+rid);
+      report.scrollIntoView();
+      report.style.backgroundColor ="#8ac6ff"
+    }
+  };
+</script>
   <b-button-toolbar class="d-flex flex-row-reverse m-2">
     <b-button-group>
       <b-button disabled variant="outline-dark" class="generate-button">
@@ -21,8 +31,10 @@
       </b-button>
     </b-button-group>
   </b-button-toolbar>
+
   <b-list-group flush>
-    <b-list-group-item v-for="report in reports">
+    <b-list-group-item v-for="report in reports" v-bind:id="'reportid'+report.id">
+
       <span v-if="report.type == 'stock'">
         <span class="mdi mdi-file-chart-outline"></span>
         Stock report,&nbsp;
@@ -31,7 +43,10 @@
         <span class="mdi mdi-file-percent-outline"></span>
         Finance report,&nbsp;
       </span>
+
       [[ moment(report.datetime).format(dateTimeStringFormat) ]]
+      <a :href="report.filename" download>download</a>
+
     </b-list-group-item>
   </b-list-group>
 

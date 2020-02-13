@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Item, Notification, Sale, SaleItem, Customer
+from .models import Item, Notification, Sale, SaleItem, Customer, Report
 
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
@@ -59,4 +59,15 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
             'charge_code',
             'pays_vat',
             'allowed_chemicals',
+        )
+
+class ReportSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Report
+        fields = (
+            'id',
+            'user_id',
+            'filename',
+            'report_type',
+            'created_date'
         )

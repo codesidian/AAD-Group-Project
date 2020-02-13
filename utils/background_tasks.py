@@ -1,10 +1,11 @@
 from background_task import background
 from django.conf import settings
-from api.models import Notification, Sale, SaleItem, Item, Customer, Return, Staff, StockCheck, StockCheckItem
+from api.models import Notification, Sale, SaleItem, Item, Customer, Return, Staff, StockCheck, StockCheckItem, Report
 from openpyxl import Workbook
 import uuid
 from django.utils import timezone
 
+REPORT_DIR = "staff/reports/"
 
 @background(schedule=60)
 def generateSalesReport(userid, fromDate, toDate):
@@ -49,15 +50,22 @@ def generateSalesReport(userid, fromDate, toDate):
                 customer.dept_id, customer.full_name
             ]
             ws2.append(currentRow)
-    wb.save("Sales_Report"+str(timezone.now().strftime("%Y%m%d-%H%M%S"))+".xlsx")
+    filename = "Sales_Report"+str(timezone.now().strftime("%Y%m%d-%H%M%S"))+".xlsx"
+    wb.save(REPORT_DIR+filename)
     
     reportMessage="Sales Report Ready"
+    report = Report(user_id=userid,
+                filename=filename,
+                created_date=timezone.now(),
+                report_type="ST")
+    report.save()    
     notify = Notification(user_id=userid,
                           text=reportMessage,
                           notification_type="RE",
-                          link="NotImplemented",
+                          link="/staff/reports/?id="+str(report.id),
                           seen=False)
-    wb.save("Sales_Report" + str(uuid.uuid4()) + ".xlsx")
+    notify.save()
+    
 
 @background(schedule=60)
 def generateReturnsReport(userid, fromDate, toDate):
@@ -81,13 +89,19 @@ def generateReturnsReport(userid, fromDate, toDate):
             staff.full_name, ret.quantity, ret.reason, ret.datetime
         ]
         ws1.append(currentRow)
-    wb.save("Return_Report"+str(timezone.now().strftime("%Y%m%d-%H%M%S"))+".xlsx")
+    filename = "Return_Report"+str(timezone.now().strftime("%Y%m%d-%H%M%S"))+".xlsx"
+    wb.save(REPORT_DIR+filename)
     reportMessage="Return Report Ready"
-
+    
+    report = Report(user_id=userid,
+                    filename=filename,
+                    created_date=timezone.now(),
+                    report_type="ST")
+    report.save()
     notify = Notification(user_id=userid,
                           text=reportMessage,
                           notification_type="RE",
-                          link="NotImplemented",
+                          link="/staff/reports/?id="+str(report.id),
                           seen=False)
     notify.save()
 
@@ -132,13 +146,19 @@ def generateStockReport(userid, includeChecks, fromDate="", toDate=""):
                 checkedItem.expected_quantity, itemDetails.warning_quantity
             ]
             ws2.append(currentRow)
-    wb.save("Stock_Report"+str(timezone.now().strftime("%Y%m%d-%H%M%S"))+".xlsx")
+    filename = "Stock_Report"+str(timezone.now().strftime("%Y%m%d-%H%M%S"))+".xlsx"
+    wb.save(REPORT_DIR+filename)
     reportMessage="Stock Report Ready"
-
+    
+    report = Report(user_id=userid,
+                    filename=filename,
+                    created_date=timezone.now(),
+                    report_type="ST")
+    report.save()
     notify = Notification(user_id=userid,
                           text=reportMessage,
                           notification_type="RE",
-                          link="NotImplemented",
+                          link="/staff/reports/?id="+str(report.id),
                           seen=False)
     notify.save()
 

@@ -73,6 +73,15 @@
       transform-origin: top right;
     }
   </style>
+  <script>
+ function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+} 
+  </script>
 {% endblock head %}
 {% block content %}
   <div id="app">
@@ -152,7 +161,7 @@
             </span> 
             </template>
             <template v-else>
-                <b-dropdown-item :href="notification.link">
+                <b-dropdown-item>
                 You're all caught up!
               </b-dropdown-item> 
             </template>
@@ -397,7 +406,9 @@
         axios.get('/api/notifications/').then(({ data }) => {
           this.notifications = data
         })
-
+        axios.get('/api/reports/').then(({ data }) => {
+          this.reports = data
+        })
         axios.get('/api/sales/').then(({ data }) => {
           this.sales = data
         })

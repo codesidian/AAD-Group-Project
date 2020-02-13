@@ -25,7 +25,7 @@ def products(HttpRequest):
     return render(HttpRequest, 'staff/products.html', context)
 
 @login_required
-def reports(HttpRequest):
+def reports(HttpRequest,id=0):
     context = {'title': 'Reports'}
     return render(HttpRequest, 'staff/reports.html', context)
 
@@ -158,3 +158,12 @@ def genProductLabels(HttpRequest):
             items.append(itemDict)
         context = {'items': items}
         return render(HttpRequest, 'staff/labels.html', context)
+
+@login_required
+@manager_required
+def purgeReports(HttpRequest):
+    Report.objects.all().delete()
+    Notification.objects.all().delete()
+    return HttpResponseRedirect("reports")
+    
+    

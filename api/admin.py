@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, User, Customer, Staff, Department, Notification, Sale, SaleItem, Return, StockCheck, StockCheckItem
+from .models import Item, User, Customer, Staff, Department, Notification, Sale, SaleItem, Return, StockCheck, StockCheckItem, Report
 
 admin.site.register(Item)
 admin.site.register(User)
@@ -11,4 +11,4 @@ admin.site.register(Sale)
 admin.site.register(SaleItem)
 admin.site.register(Return)
 admin.site.register(StockCheck)
-admin.site.register(StockCheckItem)
+admin.site.register(Report)

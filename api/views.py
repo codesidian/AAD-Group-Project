@@ -2,8 +2,8 @@ from rest_framework import viewsets, mixins, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 
-from .serializers import ItemSerializer, NotificationSerializer, SaleSerializer, SaleItemSerializer, CustomerSerializer
-from .models import Item, Notification, Sale, SaleItem, Customer
+from .serializers import ItemSerializer, NotificationSerializer, SaleSerializer, SaleItemSerializer, CustomerSerializer, ReportSerializer
+from .models import Item, Notification, Sale, SaleItem, Customer, Report
 from .filters import SaleFilter
 
 from rest_framework.decorators import action
@@ -34,7 +34,17 @@ class ItemViewSet(viewsets.ModelViewSet):
         seralizer = self.get_serializer(query, many=True)
         return Response(seralizer.data)
     
+class ReportViewSet(viewsets.ModelViewSet):
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    authentication_classes = [
+        SessionAuthentication,
+    ]
+    queryset = Report.objects.all().order_by('id')
+    serializer_class = ReportSerializer
 
+    
 class SaleViewSet(viewsets.ModelViewSet):
     permission_classes = [
         IsAuthenticated,
