@@ -1,14 +1,31 @@
 {% extends "staff.html" %}
 {% load static %}
 {% block title %}{{title}}{% endblock title %}}
+{% block head-inner %}
+<style type="text/css">
+  #qrCanvas {
+    display: none;
+  }
+
+  #qrVideo {
+    object-fit: fill;
+    height: 100%;
+    width: 100%;
+  }
+</style>
+{% endblock head-inner %}
 {% block page %}
-  <b-container fluid class="px-0 py-0">
-          <video id="qrVideo" style=" height: 100%; width: 100%;" autoplay></video>
-          <canvas id="qrCanvas" style="display:none;"></canvas>
-          <b-card-text>
-            [[ decodedString ]]
-          </b-card-text>
+  <b-container fluid>
+    <b-row class="my-3">
+      <b-col class="mb-lg-0 mb-3 col-lg-6 col-12">
+        <b-card>
+          <video id="qrVideo" autoplay></video>
+        </b-card>
+        <b-button variant="primary" @click="submitStockCheck()">Submit</b-button>
+      </b-col>
+    </b-row>
   </b-container>
+  <canvas id="qrCanvas"></canvas>
   <script type="text/javascript">
     //
     //
@@ -53,8 +70,6 @@
       }
     }
 
-    init()
-
     function draw() {
       var canvas = document.querySelector('#qrCanvas')
       var context = canvas.getContext('2d')
@@ -64,10 +79,22 @@
       data = context.getImageData(0, 0, canvas.width, canvas.height).data
       const code = jsQR(data, canvas.width, canvas.height, { inversionAttempts: 'dontInvert' });
       if (code) {
+        var quantity = ''
         window.vm.decodedString = code.data
-        var quantity = prompt("Enter quantity for " + window.vm.decodedString)
+        var currentQuantity = ''
+        if (window.vm.stockCheckItems[code.data]) {
+          currentQuantity = window.vm.stockCheckItems[code.data]
+        }
+        do {
+          quantity = prompt("Enter quantity for " + window.vm.decodedString, currentQuantity)
+        } while (quantity && (isNaN(quantity)))
+        window.vm.stockCheckItems[code.data] = quantity
       }
       setTimeout(draw, 10);
     }
+
+    (function() {
+      init()
+    })()
   </script>
 {% endblock page %}

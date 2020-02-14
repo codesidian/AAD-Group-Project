@@ -109,10 +109,12 @@
     return vars;
 } 
   </script>
+  {% block head-inner %}
+  {% endblock head-inner %}
 {% endblock head %}
 {% block content %}
   <div id="app">
-    <b-navbar toggleable="lg" type="dark" variant="primary" sticky>
+    <b-navbar id="topNav" toggleable="lg" type="dark" variant="primary" sticky>
       <b-navbar-brand
         :active="isActive('{% url 'staffmodule-home' %}')"
         :disabled="isActive('{% url 'staffmodule-home' %}')"
@@ -333,6 +335,7 @@
         selectedEditProductForSale: '',
         selectedProductQr: '',
         selectedProductRows: [],
+        stockCheckItems: {}
       },
       methods: {
         setNotificationSeen(id) {
@@ -443,6 +446,14 @@
             .catch(err => {
               // An error occurred
             })
+        },
+
+        submitStockCheck() {
+          var queryString = '?'
+          for (let [key, value] of Object.entries(this.stockCheckItems)) {
+            queryString += key + '=' + value + '&'
+          }
+          axios.post('/api/stockCheck' + queryString)
         }
       },
       beforeCreate: function() {
