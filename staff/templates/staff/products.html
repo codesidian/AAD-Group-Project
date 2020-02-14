@@ -4,7 +4,7 @@
 {% block page %}
   <b-button-toolbar class="d-flex flex-row-reverse m-2">
     <b-button-group>
-      <b-button variant="primary" @click="addNewProduct()">
+      <b-button variant="primary" data-toggle="modal" data-target="#addNewProductModal">
         <span class="mdi mdi-plus-thick"></span>
         Add New Product
       </b-button>
@@ -75,110 +75,49 @@
     </div>
   </b-modal>
 
-  <b-modal
-    id="bv-modal-add-new-product"
-    centered
-    :header-bg-variant="'primary'"
-    :header-text-variant="'light'"
-  >
-    <template v-slot:modal-title>Add New Product</template>
-    <form action="{% url 'staffmodule-addProduct' %}" ref="form" @submit.stop.prevent="handleSubmit">
-      <b-form-group
-        label="Code"
-        label-for="code-input"
-        invalid-feedback="Code is required"
-      >
-        <b-form-input
-          id="code-input"
-          name="code"
-          v-model="addNewProductCode"
-          required
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-        label="Name"
-        label-for="name-input"
-        invalid-feedback="Name is required"
-      >
-        <b-form-input
-          id="name-input"
-          name="name"
-          v-model="addNewProductName"
-          required
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-        label="Price"
-        label-for="price-input"
-        invalid-feedback="Price is required"
-      >
-        <b-form-input
-          id="price-input"
-          name="price"
-          v-model="addNewProductPrice"
-          required
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-        label="Quantity"
-        label-for="quantity-input"
-        invalid-feedback="Quantity is required"
-      >
-        <b-form-input
-          id="quantity-input"
-          name="quantity"
-          v-model="addNewProductQuantity"
-          required
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-        label="Warning Quantity"
-        label-for="warning-quantity-input"
-        invalid-feedback="Warning quantity is required"
-      >
-        <b-form-input
-          id="warning-quantity-input"
-          name="warning_quantity"
-          v-model="addNewProductWarningQuantity"
-          required
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group>
-        <b-form-checkbox
-          id="checkbox-1"
-          name="is_chemical"
-          v-model="status"
-          value="true"
-          unchecked-value="false"
-        >
-          Is Chemical
-        </b-form-checkbox>
-      </b-form-group>
-      <b-form-group
-        label="Pack Size"
-        label-for="pack-size-input"
-        invalid-feedback="Pack size is required"
-      >
-        <b-form-input
-          id="pack-size-input"
-          name="pack_size"
-          v-model="name"
-          required
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group>
-        <b-form-checkbox
-          id="for-sale-input"
-          name="for_sale"
-          v-model="status"
-          value="true"
-          unchecked-value="false"
-        >
-          For sale
-        </b-form-checkbox>
-      </b-form-group>
-    </form>
-  </b-modal>
+  <!-- Add New Product Modal -->
+  <div class="modal fade" id="addNewProductModal" tabindex="-1" role="dialog" aria-labelledby="addNewProductModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addNewProductModalLabel">Add New Product</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <b-form action="{% url 'staffmodule-addProduct' %}" method="post">
+          <div class="modal-body">
+            {% csrf_token %}
+            <b-form-group id="input-group-1" label="Code:" label-for="input-1" description="">
+              <b-form-input id="input-1" type="text" required name="code"></b-form-input>
+            </b-form-group>
+            <b-form-group id="input-group-2" label="Name:" label-for="input-2" description="">
+              <b-form-input id="input-2" type="text" required name="name"></b-form-input>
+            </b-form-group>
+            <b-form-group id="input-group-3" label="Price (in pence):" label-for="input-3" description="">
+              <b-form-input id="input-3" type="number" min="0" required name="price"></b-form-input>
+            </b-form-group>
+            <b-form-group id="input-group-4" label="Warning Quantity:" label-for="input-4" description="">
+              <b-form-input id="input-4" type="number" min="0" required name="warning_quantity"></b-form-input>
+            </b-form-group>
+            <b-form-group id="input-group-5" label="" label-for="input-5" description="">
+              <b-form-checkbox id="input-5" name="is_chemical" value="1">Is Chemical</b-form-checkbox>
+            </b-form-group>
+            <b-form-group id="input-group-6" label="Pack Size:" label-for="input-6" description="">
+              <b-form-input id="input-6" type="number" min="0" required name="pack_size"></b-form-input>
+            </b-form-group>
+            <b-form-group id="input-group-7" label="" label-for="input-7" description="">
+              <b-form-checkbox id="input-7" name="for_sale" value="1">For Sale</b-form-checkbox>
+            </b-form-group>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button class="btn btn-primary" type="submit" onclick="">Add Product</button>
+          </div>
+        </b-form>
+      </div>
+    </div>
+  </div>
 
   <b-modal
     id="bv-modal-filter-products-list"

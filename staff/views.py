@@ -200,21 +200,20 @@ def addProduct(request: HttpRequest):
     code = request.POST['code']
     name = request.POST['name']
     price = request.POST['price']
-    quantity = request.POST['quantity']
     warning_quantity = request.POST['warning_quantity']
-    is_chemical = request.POST['is_chemical']
+    is_chemical = request.POST.get('is_chemical', False)
     pack_size = request.POST['pack_size']
-    for_sale = request.POST['for_sale']
+    for_sale = request.POST.get('for_sale', False)
 
     item = Item()
-    item.code = code[0]
-    item.name = name[0]
-    item.price = int(float(price[0]) * 100)
-    item.quantity = int(quantity[0])
-    item.warning_quantity = int(warning_quantity[0])
-    item.is_chemical = len(is_chemical) == 1
-    item.pack_size = int(pack_size[0])
-    item.for_sale = len(for_sale) == 1
+    item.code = code
+    item.name = name
+    item.price = price
+    item.quantity = 0
+    item.warning_quantity = warning_quantity
+    item.is_chemical = is_chemical
+    item.pack_size = int(pack_size)
+    item.for_sale = for_sale
 
     item.save()
     messages.success(request, 'Product: '+name+' added successfully.')
