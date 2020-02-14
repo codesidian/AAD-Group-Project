@@ -61,19 +61,74 @@
     centered
     :header-bg-variant="'primary'"
     :header-text-variant="'light'"
-  >
+  size="lg">
+
     <template v-slot:modal-title>
       Edit Product
     </template>
-    <div class="d-block text-center">
-      <div>Name: [[ selectedEditProductName ]]</div>
-      <div>Price: [[ formatAsCurrency(selectedEditProductPrice) ]]</div>
-      <div>Warning Quantity: [[ selectedEditProductWarningQuantity ]]</div>
-      <div>Is Chemical: [[ selectedEditProductIsChemical ]]</div>
-      <div>Pack Size: [[ selectedEditProductPackSize ]]</div>
-      <div>For Sale: [[ selectedEditProductForSale ]]</div>
+
+    <div class="container">
+          <form action="{% url 'staffmodule-modifyProduct' %}" method="post">
+    {% csrf_token %}
+    <h5>Product Details</h5>
+      <div class="row"> 
+        <d-col class="col-3">Code: </d-col>
+        <d-col class="col-9">[[ selectedEditProductCode ]]</d-col>
+      </div>
+      <div class="row"> 
+        <d-col class="col-3">Name: </d-col>
+        <d-col class="col-9">[[ selectedEditProductName ]]</d-col>
+      </div>
+      <div class="row"> 
+        <d-col class="col-3">Price:  </d-col>
+        <d-col class="col-9">[[ formatAsCurrency(selectedEditProductPrice) ]]</d-col>
+      </div>
+      <div class="row"> 
+        <d-col class="col-3">Quantity: </d-col>
+        <d-col class="col-9">[[ selectedEditProductQuantity ]]</d-col>
+      </div>
+      <div class="row"> 
+        <d-col class="col-3">Warning Quantity: </d-col>
+        <d-col class="col-9">[[ selectedEditProductWarningQuantity ]]</d-col>
+      </div>
+      <div class="row"> 
+        <d-col class="col-3">Is Chemical: </d-col>
+        <d-col class="col-9">[[ selectedEditProductIsChemical ]]</d-col>
+      </div>
+      <div class="row"> 
+        <d-col class="col-3">Pack Size:  </d-col>
+        <d-col class="col-9">[[ selectedEditProductPackSize ]]</d-col>
+      </div>
+      <div class="row"> 
+        <d-col class="col-3">For Sale:  </d-col>
+        <d-col class="col-9">[[ selectedEditProductForSale ]]</d-col>
+      </div>
+    
+    <h5>New Details</h5>
+      <div class="row"> 
+        <b-form-input hidden v-bind:id="'productId'+selectedEditProductId" name="prodId" size="sm" v-bind:value="selectedEditProductId" type="number"></b-form-input>
+        <b-form-input v-bind:id="'prodCode'+selectedEditProductId" name="prodCode" size="sm" placeholder="Code" type="text"></b-form-input>
+        <b-form-input v-bind:id="'prodName'+selectedEditProductId" name="prodName" size="sm" placeholder="Name" type="text"></b-form-input>
+        <b-form-input v-bind:id="'prodPrice'+selectedEditProductId" name="prodPrice" size="sm" placeholder="Price" type="number"></b-form-input>
+        <b-form-input v-bind:id="'prodQty'+selectedEditProductId" name="prodQty" size="sm" placeholder="Quantity" type="number"></b-form-input>
+        <b-form-input v-bind:id="'prodQtyWarn'+selectedEditProductId" name="prodQtyWarn" size="sm" placeholder="Warn Quantity" type="number"></b-form-input>
+        <b-form-checkbox v-bind:id="'prodIsChemical'+selectedEditProductId" name="prodIsChemical" value="1">Is Chemical</b-form-checkbox>
+        <b-form-input v-bind:id="'prodPackSize'+selectedEditProductId" name="prodPackSize" size="sm" placeholder="Pack Size" type="number"></b-form-input>
+        <b-form-checkbox v-bind:id="'prodForSale'+selectedEditProductId" name="prodForSale" value="1">For Sale</b-form-checkbox>
+      </div>
+      <b-button type="submit" size="sm" variant="success" @click="ok()">
+        Save
+      </b-button>
+    </form>
     </div>
+        <template v-slot:modal-footer="{ok}">
+      <b-button size="sm" variant="primary" @click="ok()">
+        Cancel
+      </b-button>
+    </template>
+    
   </b-modal>
+  
 
   <!-- Add New Product Modal -->
   <div class="modal fade" id="addNewProductModal" tabindex="-1" role="dialog" aria-labelledby="addNewProductModal" aria-hidden="true">

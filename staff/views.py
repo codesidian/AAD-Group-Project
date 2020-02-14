@@ -244,30 +244,38 @@ def addProduct(request: HttpRequest):
 
 @login_required
 def modifyProduct(request: HttpRequest):
-    id = request.POST['id']
-    code = request.POST['code']
-    name = request.POST['name']
-    price = request.POST['price']
-    quantity = request.POST['quantity']
-    warning_quantity = request.POST['warning_quantity']
-    is_chemical = request.POST['is_chemical']
-    pack_size = request.POST['pack_size']
-    for_sale = request.POST['for_sale']
+    id = request.POST['prodId']
+    code = request.POST.get('prodCode')
+    name = request.POST.get('prodName')
+    price = request.POST.get('prodPrice')
+    quantity = request.POST.get('prodQty')
+    warning_quantity = request.POST.get('prodQtyWarn')
+    is_chemical = request.POST.get('prodIsChemical', False)
+    pack_size = request.POST.get('prodPackSize')
+    for_sale = request.POST.get('prodForSale', False)
 
     item = None
     try:
         item = Item.objects.get(id=id)
     except Item.NotFound:
         return HttpResponse(status=404)
-
-    item.code = code[0]
-    item.name = name[0]
-    item.price = int(float(price[0]) * 100)
-    item.quantity = int(quantity[0])
-    item.warning_quantity = int(warning_quantity[0])
-    item.is_chemical = len(is_chemical) == 1
-    item.pack_size = int(pack_size[0])
-    item.for_sale = len(for_sale) == 1
+    #partial modificaitons are possible
+    if code:
+        item.code = code
+    if name:
+        item.name = name
+    if price:
+        item.price = int(float(price) * 100)
+    if quantity:
+        item.quantity = int(quantity)
+    if warning_quantity:
+        item.warning_quantity = int(warning_quantity[0])
+    if is_chemical:
+        item.is_chemical = is_chemical
+    if pack_size:
+        item.pack_size = int(pack_size)
+    if for_sale:
+        item.for_sale = for_sale
     
     item.save()
     messages.success(request, 'Product: '+name+' changed successfully.')

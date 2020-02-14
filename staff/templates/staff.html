@@ -330,6 +330,7 @@
         selectedEditProductName: '',
         selectedEditProductPrice: '',
         selectedEditProductWarningQuantity: '',
+        selectedEditProductQuantity: '',
         selectedEditProductIsChemical: '',
         selectedEditProductPackSize: '',
         selectedEditProductForSale: '',
@@ -348,12 +349,13 @@
         },
 
         editProduct(id) {
-          this.selectedEditProduct = id
+          this.selectedEditProductId = id
           this.selectedEditProductCode = this.products[id-1].code
           this.selectedEditProductName = this.products[id-1].name
           this.selectedEditProductPrice = this.products[id-1].price
           this.selectedEditProductWarningQuantity = this.products[id-1].warning_quantity
           this.selectedEditProductIsChemical = this.products[id-1].is_chemical
+          this.selectedEditProductQuantity = this.products[id-1].quantity
           this.selectedEditProductPackSize = this.products[id-1].pack_size
           this.selectedEditProductForSale = this.products[id-1].for_sale
           this.$bvModal.show('bv-modal-product')
