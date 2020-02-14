@@ -63,6 +63,12 @@
     crossorigin="anonymous"
   >
   </script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/jsqr@1.2.0/dist/jsQR.js"
+    integrity="sha256-0/SZSQ0fcKu/9aB/O6qUFHBkU2VQj/AMg3Q4vBkMqbk="
+    crossorigin="anonymous"
+  >
+  </script>
   <script>
     axios.defaults.xsrfCookieName = 'csrftoken'
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
@@ -155,6 +161,13 @@
           >
             Intelligence
           </b-nav-item>-->
+          <b-nav-item
+            :active="isActive('{% url 'staffmodule-stockCheck' %}')"
+            :disabled="isActive('{% url 'staffmodule-stockCheck' %}')"
+            href="{% url 'staffmodule-stockCheck' %}"
+          >
+            Stock Check
+          </b-nav-item>
           <b-nav-item
             :active="isActive('{% url 'staffmodule-admin' %}')"
             :disabled="isActive('{% url 'staffmodule-admin' %}')"
@@ -271,6 +284,7 @@
           { id: 4, name: 'Kingston 16GB SD Card', quantity: 23, warning_quantity: 30 }
         ],
         */
+        decodedString: 'Scan a QR code to continue',
         lowStockProducts: [],
         notifications: [],
         numSalesToday: 0,
@@ -500,6 +514,7 @@
       },
       delimiters: ['[[',']]']
     })
+    window.vm = app
   </script>
   {{username}}
 {% endblock content %}

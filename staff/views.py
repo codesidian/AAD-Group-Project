@@ -20,7 +20,6 @@ from utils.background_tasks import generateSalesReport, generateReturnsReport, g
 
 @login_required
 def home(HttpRequest):
-
     context = {'title': 'Staff Home'}
     return render(HttpRequest, 'staff/home.html', context)
 
@@ -29,6 +28,7 @@ def home(HttpRequest):
 def products(HttpRequest):
     context = {'title': 'Products'}
     return render(HttpRequest, 'staff/products.html', context)
+
 
 @login_required
 def reports(HttpRequest,id=0):
@@ -48,15 +48,23 @@ def reports(HttpRequest,id=0):
             context = {'title': 'Reports'}
             return render(HttpRequest, 'staff/reports.html', context)
 
+
 @login_required
 def sales(HttpRequest):
     context = {'title': 'Sales'}
     return render(HttpRequest, 'staff/sales.html', context)
 
+
 @login_required
 def intelligence(HttpRequest):
     context = {'title': 'Intelligence'}
     return render(HttpRequest, 'staff/intelligence.html', context)
+
+
+@login_required
+def stockCheck(HttpRequest):
+    context = {'title': 'Stock Check'}
+    return render(HttpRequest, 'staff/stock_check.html', context)
 
 #TODO: Customer managemenet. Setting enabled disabled. 
 
@@ -172,7 +180,7 @@ def genProductLabels(HttpRequest):
         items = []
         for code in codes:
             buffer = io.BytesIO()
-            qr = pyqrcode.create(code)
+            qr = pyqrcode.create(code, error='L', version=4)
             qr.svg(buffer, scale=7)
             itemDict = Item.objects.get(code=code).__dict__
             itemDict['price'] = "£{:.2f}".format(itemDict['price']/100)
