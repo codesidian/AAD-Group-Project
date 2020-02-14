@@ -51,8 +51,11 @@ def reports(HttpRequest,id=0):
 
 @login_required
 def sales(HttpRequest):
-    context = {'title': 'Sales'}
-    return render(HttpRequest, 'staff/sales.html', context)
+    reasons =  Return.ReturnReason.choices
+    if HttpRequest.method == 'GET':
+        context = {'title': 'Sales',
+                'reasons':reasons}
+        return render(HttpRequest, 'staff/sales.html', context)
 
 
 @login_required
@@ -269,6 +272,7 @@ def profile(HttpRequest):
 def refundProduct(request: HttpRequest):
     itemid = request.POST['item']
     refundQuantity = int(request.POST['quantity'])
+    reason = request.POST['reason']
     context = {'title': 'Sales'}
     
     saleItem = SaleItem.objects.get(id=itemid)
@@ -282,7 +286,7 @@ def refundProduct(request: HttpRequest):
         saleItem.returned_quantity+=refundQuantity
         ret = Return(datetime = timezone.now(), staff_id=request.user.id,
                     customer_id=customer.user_id,sale_item_id=saleItem.id,
-                    reason="NN",quantity=refundQuantity)
+                    reason=reason,quantity=refundQuantity)
         ret.save()
         saleItem.save()
         messages.success(request, 'Refund created successfully.')
