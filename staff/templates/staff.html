@@ -510,12 +510,6 @@
           this.numSalesYesterday = data.length
         })
 
-          axios.get('/api/staff/').then(({ data }) => {
-          this.userAccessLevel = data.access_level;
-          this.userFirstName = data.first_name;
-          this.userLastName = data.last_name;
-          this.userLoginCode = data.login_code;
-        })
       },
       delimiters: ['[[',']]']
     })
