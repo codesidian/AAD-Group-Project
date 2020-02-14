@@ -13,6 +13,7 @@ urlpatterns = [
     path('profile', views.profile, name="staffmodule-profile"),
     path('createcustomer', views.createCustomer, name="staffmodule-createCustomer"),
     path('createstaff', views.createStaff, name="staffmodule-createStaff"),
+    path('changepassword', views.changePassword, name="staffmodule-changePassword"),
     path('genSalesReport',views.genSalesReport, name="staffmodule-genSalesReport"),
     path('genReturnReport',views.genReturnReport, name="staffmodule-genReturnReport"),
     path('genStockReport',views.genStockReport, name="staffmodule-genStockReport"),

@@ -5,7 +5,7 @@ import pyqrcode
 from datetime import timedelta
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth import logout, update_session_auth_hash
 from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
 from django.contrib import messages
 from django.db import transaction
@@ -280,7 +280,11 @@ def modifyProduct(request: HttpRequest):
     return HttpResponseRedirect('products')
 @login_required
 def profile(HttpRequest):
-    context = {'title': 'Profile'}
+    account = User.objects.get(id=HttpRequest.user.id)
+    context = {'title': 'Profile',
+               'user_email': account.email,
+               'last_login': account.last_login,
+               'username':account.username}
     return render(HttpRequest, 'staff/profile.html', context)
 
 @login_required
@@ -312,3 +316,17 @@ def refundProduct(request: HttpRequest):
         return render(request, 'staff/sales.html', context)
     return render(request, 'staff/sales.html', context)
 
+@login_required
+def changePassword(HttpRequest):
+    account = User.objects.get(id=HttpRequest.user.id)
+    oldPassword = HttpRequest.POST['oldPassword']
+    newPassword = HttpRequest.POST['newPassword']
+    if account.check_password(oldPassword):
+        messages.success(HttpRequest, 'Password changed successfully.')
+        account.set_password(newPassword)
+        account.save()
+        update_session_auth_hash(HttpRequest, account)
+        return HttpResponseRedirect('profile')
+    else:
+        messages.success(HttpRequest, 'Password Incorrect')
+        return HttpResponseRedirect('profile')
