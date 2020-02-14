@@ -289,6 +289,10 @@ def refundProduct(request: HttpRequest):
                     reason=reason,quantity=refundQuantity)
         ret.save()
         saleItem.save()
+        if(reason == 'NN' or reason == 'WI'):
+            itm = Item.objects.get(id=saleItem.item_id)
+            itm.quantity+=refundQuantity
+            itm.save()
         messages.success(request, 'Refund created successfully.')
         return render(request, 'staff/sales.html', context)
     return render(request, 'staff/sales.html', context)

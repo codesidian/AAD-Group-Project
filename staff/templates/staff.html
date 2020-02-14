@@ -385,20 +385,21 @@
           this.selectedProductRows = items
         },
         purgeReports() {
-            this.initiatePurge = ''
+            this.initiatePurge = false
 
             this.$bvModal.msgBoxConfirm('You\'re about to purge all reports. This is delete all reports on the system.', {
             title: 'Purge',
             size: 'md',
             okVariant: 'danger',
             okTitle: 'PURGE',
-            headerBgVariant:'danger',
+
             cancelTitle: 'Cancel',
             footerClass: 'p-2',
-            hideHeaderClose: false,
+            hideHeaderClose: true,
             centered: true
           })
             .then(value => {
+              this.initiatePurge = value
               if (this.initiatePurge){
                 axios.post("{% url 'staffmodule-purgeReports' %}")
                 location.reload();
