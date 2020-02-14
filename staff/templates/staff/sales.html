@@ -67,9 +67,9 @@
               <b-form-input v-bind:id="'qty'+row.item.id" name="quantity" size="sm" placeholder="Qty" type="number"></b-form-input>
           </b-col>
           <b-col class="col-3">
-            <select class="form-control" id="reasonSelect" name="reason">
+            <select class="form-control" id="reasonSelect" name="reason" size="sm" >
               {% for res in reasons %}
-                <option value={{res.0}}>{{res.1}}</option>
+                <option value={{res.0}} size="sm" >{{res.1}}</option>
               {% endfor %}
             </select>
           </b-col>

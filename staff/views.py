@@ -218,19 +218,28 @@ def addProduct(request: HttpRequest):
     pack_size = request.POST['pack_size']
     for_sale = request.POST.get('for_sale', False)
 
-    item = Item()
-    item.code = code
-    item.name = name
-    item.price = price
-    item.quantity = 0
-    item.warning_quantity = warning_quantity
-    item.is_chemical = is_chemical
-    item.pack_size = int(pack_size)
-    item.for_sale = for_sale
+    valid = True
+    #check to see for conflicts
+    for itm in Item.objects.all():
+        if itm.code == code:
+            valid = False
+    if valid:
+        item = Item()
+        item.code = code
+        item.name = name
+        item.price = price
+        item.quantity = 0
+        item.warning_quantity = warning_quantity
+        item.is_chemical = is_chemical
+        item.pack_size = int(pack_size)
+        item.for_sale = for_sale
 
-    item.save()
-    messages.success(request, 'Product: '+name+' added successfully.')
-    return HttpResponseRedirect('products')
+        item.save()
+        messages.success(request, 'Product: '+name+' added successfully.')
+        return HttpResponseRedirect('products')
+    else:
+        messages.error(request, 'Product Code: '+code+' already exists.')
+        return HttpResponseRedirect('products')
 
 
 @login_required
