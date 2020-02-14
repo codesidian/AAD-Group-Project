@@ -38,7 +38,5 @@ def user_auth(request):
       return HttpResponseRedirect("/")
 
 def user_logout(HttpRequest):
-   print("User logged out " +  HttpRequest.session["username"])
    logout(HttpRequest)
    return HttpResponseRedirect('/')
-
