@@ -20,7 +20,7 @@ RUN npm i && npm run build
 WORKDIR /usr/src/app
 
 # Collect static files
-RUN python manage.py collectstatic --noinput --clear
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8080
 
