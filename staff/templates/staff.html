@@ -11,6 +11,9 @@
       height: 20em;
       width: 20em;
     }
+    .dropdown-o {
+      padding:unset !important;
+    }
   </style>
   <link
     rel="stylesheet"
@@ -72,6 +75,24 @@
       position: absolute;
       transform-origin: top right;
     }
+
+
+  .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0 !important;
+  clear: both;
+  white-space: unset !important;
+  }
+
+  .delete-icon {
+    transition: all .5s ease-in-out;
+  }
+
+  .delete-icon:hover {
+    color: #9c0000;
+    cursor:pointer;
+  }
   </style>
   <script>
  function getUrlVars() {
@@ -143,6 +164,8 @@
           </b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
+
+
           <b-nav-item-dropdown right>
             <template v-slot:button-content>
               <span class="mdi mdi-bell"></span>
@@ -153,10 +176,17 @@
             </template>
             <template v-if="notifications.length > 0">
             <span v-for="(notification, index) in notifications">
-              <b-dropdown-item :href="notification.link">
+
+
+              
+              <div class="w-100 row m-0 d-flex justify-content-center align-items-center">
+              <b-dropdown-item :href="notification.link" class="d-inline col-lg-9 col-md-9 col-sm-9 col-9 p-0 dropdown-o text-center">
                 [[ notification.text ]] 
-                <i class="mdi mdi-delete thumby" style="float:right" @click="setNotificationSeen(notification.id)"></i>
+                
               </b-dropdown-item> 
+              <i class="mdi mdi-delete thumby d-inline col-lg-3 col-md-3 col-sm-3 col-3 delete-icon" @click="setNotificationSeen(notification.id)"></i>
+              </div>
+
               <b-dropdown-divider v-if="index < notificationsCount-1"></b-dropdown-divider>
             </span> 
             </template>
@@ -167,6 +197,8 @@
             </template>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right>
+
+
             <!-- Using 'button-content' slot -->
             <template v-slot:button-content>
               <em>{{users_firstname}}</em>
@@ -292,6 +324,7 @@
         setNotificationSeen(id) {
           axios.post('/api/notifications/'+id+'/seen/').then(({ data }) => {
           });
+          location.reload();
         },
 
         editProduct(id) {
