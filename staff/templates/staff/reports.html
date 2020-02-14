@@ -4,12 +4,14 @@
 {% block page %}
 
   <b-button-toolbar class="d-flex flex-row-reverse m-2">
+  <template v-if="userAccessLevel == 'MA'">
       <b-button-group class="mx-1">
       <b-button variant="danger" @click="purgeReports()">
         <span class="mdi mdi-delete"></span>
         Purge Reports
       </b-button>
     </b-button-group>
+  </template>
     <b-button-group class="mx-1">
       <b-button disabled variant="outline-dark" class="generate-button">
         Generate:
