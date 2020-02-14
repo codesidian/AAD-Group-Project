@@ -37,13 +37,13 @@
        <div class="modal-body">
         {% csrf_token %}
           <div class="form-group">
-            <input id="username" name="username" type="text" class="form-control" placeholder="Username">
-            <input id="passwordA" name="passwordA" type="password" class="form-control" placeholder="Password">
-            <input id="passwordB" name="passwordB" type="password" class="form-control" placeholder="Re-enter Password">
-            <input id="email" name="email" type="email" class="form-control" placeholder="Email">
-            <input id="first_name" name="first_name" type="text" class="form-control" placeholder="First Name">
-            <input name="last_name" type="text" class="form-control" placeholder="Last Name">
-            <input name="charge_code" type="text" class="form-control" placeholder="Charge Code">
+            <input id="username" name="username" type="text" class="form-control" placeholder="Username" required>
+            <input id="passwordA" name="passwordA" type="password" class="form-control" placeholder="Password" required>
+            <input id="passwordB" name="passwordB" type="password" class="form-control" placeholder="Re-enter Password" required>
+            <input id="email" name="email" type="email" class="form-control" placeholder="Email" required>
+            <input id="first_name" name="first_name" type="text" class="form-control" placeholder="First Name" required>
+            <input name="last_name" type="text" class="form-control" placeholder="Last Name" required>
+            <input name="charge_code" type="text" class="form-control" placeholder="Charge Code" required>
             <label for="deptselect">Department:</label>
             <select class="form-control" id="deptselect" name="department">
               {% for dept in departments %}
@@ -74,13 +74,13 @@
        <div class="modal-body">
         {% csrf_token %}
           <div class="form-group">
-            <input id="username" name="username" type="text" class="form-control" placeholder="Username">
-            <input id="passwordA" name="passwordA" type="password" class="form-control" placeholder="Password">
-            <input id="passwordB" name="passwordB" type="password" class="form-control" placeholder="Re-enter Password">
-            <input id="email" name="email" type="email" class="form-control" placeholder="Email">
-            <input id="first_name" name="first_name" type="text" class="form-control" placeholder="First Name">
-            <input name="last_name" type="text" class="form-control" placeholder="Last Name">
-            <input name="login_code" type="text" class="form-control" placeholder="Login Code">
+            <input id="username" name="username" type="text" class="form-control" placeholder="Username" required>
+            <input id="passwordA" name="passwordA" type="password" class="form-control" placeholder="Password" required>
+            <input id="passwordB" name="passwordB" type="password" class="form-control" placeholder="Re-enter Password" required>
+            <input id="email" name="email" type="email" class="form-control" placeholder="Email" required>
+            <input id="first_name" name="first_name" type="text" class="form-control" placeholder="First Name" required>
+            <input name="last_name" type="text" class="form-control" placeholder="Last Name" required>
+            <input name="login_code" type="text" class="form-control" placeholder="Login Code" required>
             <label for="accessselect">Access Level:</label>
             <select class="form-control" id="accessselect" name="access_level">
               {% for level in access_levels %}

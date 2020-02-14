@@ -5,7 +5,7 @@ import pyqrcode
 from datetime import timedelta
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth import logout, update_session_auth_hash
 from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
 from django.contrib import messages
 from django.db import transaction
@@ -244,37 +244,47 @@ def addProduct(request: HttpRequest):
 
 @login_required
 def modifyProduct(request: HttpRequest):
-    id = request.POST['id']
-    code = request.POST['code']
-    name = request.POST['name']
-    price = request.POST['price']
-    quantity = request.POST['quantity']
-    warning_quantity = request.POST['warning_quantity']
-    is_chemical = request.POST['is_chemical']
-    pack_size = request.POST['pack_size']
-    for_sale = request.POST['for_sale']
+    id = request.POST['prodId']
+    code = request.POST.get('prodCode')
+    name = request.POST.get('prodName')
+    price = request.POST.get('prodPrice')
+    quantity = request.POST.get('prodQty')
+    warning_quantity = request.POST.get('prodQtyWarn')
+    is_chemical = request.POST.get('prodIsChemical', False)
+    pack_size = request.POST.get('prodPackSize')
+    for_sale = request.POST.get('prodForSale', False)
 
     item = None
     try:
         item = Item.objects.get(id=id)
     except Item.NotFound:
         return HttpResponse(status=404)
-
-    item.code = code[0]
-    item.name = name[0]
-    item.price = int(float(price[0]) * 100)
-    item.quantity = int(quantity[0])
-    item.warning_quantity = int(warning_quantity[0])
-    item.is_chemical = len(is_chemical) == 1
-    item.pack_size = int(pack_size[0])
-    item.for_sale = len(for_sale) == 1
+    #partial modificaitons are possible
+    if code:
+        item.code = code
+    if name:
+        item.name = name
+    if price:
+        item.price = int(float(price) * 100)
+    if quantity:
+        item.quantity = int(quantity)
+    if warning_quantity:
+        item.warning_quantity = int(warning_quantity)
+    item.is_chemical = is_chemical
+    if pack_size:
+        item.pack_size = int(pack_size)
+    item.for_sale = for_sale
     
     item.save()
     messages.success(request, 'Product: '+name+' changed successfully.')
     return HttpResponseRedirect('products')
 @login_required
 def profile(HttpRequest):
-    context = {'title': 'Profile'}
+    account = User.objects.get(id=HttpRequest.user.id)
+    context = {'title': 'Profile',
+               'user_email': account.email,
+               'last_login': account.last_login,
+               'username':account.username}
     return render(HttpRequest, 'staff/profile.html', context)
 
 @login_required
@@ -306,3 +316,17 @@ def refundProduct(request: HttpRequest):
         return render(request, 'staff/sales.html', context)
     return render(request, 'staff/sales.html', context)
 
+@login_required
+def changePassword(HttpRequest):
+    account = User.objects.get(id=HttpRequest.user.id)
+    oldPassword = HttpRequest.POST['oldPassword']
+    newPassword = HttpRequest.POST['newPassword']
+    if account.check_password(oldPassword):
+        messages.success(HttpRequest, 'Password changed successfully.')
+        account.set_password(newPassword)
+        account.save()
+        update_session_auth_hash(HttpRequest, account)
+        return HttpResponseRedirect('profile')
+    else:
+        messages.success(HttpRequest, 'Password Incorrect')
+        return HttpResponseRedirect('profile')
