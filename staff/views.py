@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.db import transaction
 from django.utils import timezone
 
-from api.models import Department, Customer, User, Staff, Item, Report, Notification
+from api.models import Department, Customer, User, Staff, Item, Report, Notification, Return, SaleItem, Sale
 from utils.decorators import staff_required, basic_required, manager_required
 from utils.background_tasks import generateSalesReport, generateReturnsReport, generateStockReport
 
@@ -252,4 +252,32 @@ def modifyProduct(request: HttpRequest):
     item.save()
     messages.success(request, 'Product: '+name+' changed successfully.')
     return HttpResponseRedirect('products')
+@login_required
+def profile(HttpRequest):
+    context = {'title': 'Profile'}
+    return render(HttpRequest, 'staff/profile.html', context)
+
+@login_required
+def refundProduct(request: HttpRequest):
+    itemid = request.POST['item']
+    refundQuantity = int(request.POST['quantity'])
+    context = {'title': 'Sales'}
+    
+    saleItem = SaleItem.objects.get(id=itemid)
+    sale = Sale.objects.get(id=saleItem.sale_id)
+    customer = Customer.objects.get(user_id=sale.customer_id)
+    if(saleItem.quantity < refundQuantity):
+        messages.error(request, 'Refund invalid. You can\'t refund more than the sale quantity.')
+        return render(request, 'staff/sales.html', context)
+    else:
+        saleItem.quantity-=refundQuantity
+        saleItem.returned_quantity+=refundQuantity
+        ret = Return(datetime = timezone.now(), staff_id=request.user.id,
+                    customer_id=customer.user_id,sale_item_id=saleItem.id,
+                    reason="NN",quantity=refundQuantity)
+        ret.save()
+        saleItem.save()
+        messages.success(request, 'Refund created successfully.')
+        return render(request, 'staff/sales.html', context)
+    return render(request, 'staff/sales.html', context)
 

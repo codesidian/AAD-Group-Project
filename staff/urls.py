@@ -9,6 +9,7 @@ urlpatterns = [
     path('sales', views.sales, name="staffmodule-sales"),
     path('intelligence', views.intelligence, name="staffmodule-intelligence"),
     path('admin', views.admin, name="staffmodule-admin"),
+    path('profile', views.profile, name="staffmodule-profile"),
     path('createcustomer', views.createCustomer, name="staffmodule-createCustomer"),
     path('createstaff', views.createStaff, name="staffmodule-createStaff"),
     path('genSalesReport',views.genSalesReport, name="staffmodule-genSalesReport"),
@@ -18,4 +19,5 @@ urlpatterns = [
     path('purgeReports', views.purgeReports, name="staffmodule-purgeReports"),
     path('addProduct', views.addProduct, name='staffmodule-addProduct'),
     path('modifyProduct', views.modifyProduct, name='staffmodule-modifyProduct'),
+    path('refundProduct', views.refundProduct, name='staffmodule-refundProduct')
 ]

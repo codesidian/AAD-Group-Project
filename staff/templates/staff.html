@@ -203,8 +203,8 @@
             <template v-slot:button-content>
               <em>{{users_firstname}}</em>
             </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="/logout">Sign Out</b-dropdown-item>
+            <b-dropdown-item href="profile" class="p-0 dropdown-o text-center">Profile</b-dropdown-item>
+            <b-dropdown-item href="/logout" class="p-0 dropdown-o text-center">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -319,6 +319,10 @@
         selectedEditProductForSale: '',
         selectedProductQr: '',
         selectedProductRows: [],
+        userAccessLevel: '',
+        userFirstName: '',
+        userLastName: '',
+        userLoginCode: '',
       },
       methods: {
         setNotificationSeen(id) {
@@ -367,8 +371,31 @@
           this.selectedProductRows = items
         },
         purgeReports() {
-          axios.post("{% url 'staffmodule-purgeReports' %}")
-          location.reload();
+            this.initiatePurge = ''
+
+            this.$bvModal.msgBoxConfirm('You\'re about to purge <b>all</b> reports. This is delete all reports on the system.', {
+            title: 'Purge',
+            size: 'md',
+            okVariant: 'danger',
+            okTitle: 'PURGE',
+            headerBgVariant:'danger',
+            cancelTitle: 'Cancel',
+            footerClass: 'p-2',
+            hideHeaderClose: false,
+            centered: true
+          })
+            .then(value => {
+              if (this.initiatePurge){
+                axios.post("{% url 'staffmodule-purgeReports' %}")
+                location.reload();
+              }
+              
+            })
+            .catch(err => {
+              // An error occurred
+            }) 
+          
+          
         },
 
         generateReturnsReport() {
@@ -425,6 +452,9 @@
           })
             .then(value => {
               this.issueRefund = value
+              var qty = document.getElementById('qty'+id).value
+              //axios.post("/api/refund/"+id+"/"+qty)
+              
             })
             .catch(err => {
               // An error occurred
@@ -459,6 +489,13 @@
 
         axios.get('/api/sales?date=' + yesterday).then(({ data }) => {
           this.numSalesYesterday = data.length
+        })
+
+          axios.get('/api/staff/').then(({ data }) => {
+          this.userAccessLevel = data.access_level;
+          this.userFirstName = data.first_name;
+          this.userLastName = data.last_name;
+          this.userLoginCode = data.login_code;
         })
       },
       delimiters: ['[[',']]']

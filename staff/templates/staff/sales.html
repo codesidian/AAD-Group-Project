@@ -53,10 +53,21 @@
         </template>
         <!-- Edit button per item -->
         <template v-slot:cell(refund)="row">
-          <b-button size="sm" @click="refundSaleItem(row.item.id)" class="mr-2" variant="primary">
+        <span>
+        <form action="{% url 'staffmodule-refundProduct' %}" method="post">
+        {% csrf_token %}
+          <b-col class="col-7">
+          <b-button  type="submit" size="sm"  class="mr-2" variant="primary">
             <span class="mdi mdi-currency-gbp"></span>
             Refund
           </b-button>
+          </b-col>
+          <b-col class="col-5">
+              <b-form-input v-bind:id="'qty'+row.item.id" name="quantity" size="sm" placeholder="Qty" type="number"></b-form-input>
+          </b-col>
+            <b-form-input hidden v-bind:id="'rfnd'+row.item.id" name="item" size="sm" v-bind:value="row.item.id" type="number"></b-form-input>
+          </form>
+          </span>
         </template>
       </b-table
       >

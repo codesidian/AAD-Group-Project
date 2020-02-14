@@ -1,0 +1,36 @@
+{% extends "staff.html" %}
+{% load static %}
+{% block title %}{{title}}{% endblock title %}}
+{% block page %}
+  <b-container fluid>
+    <b-row class="">
+      <b-col class="mb-lg-0 mb-3 col-lg-7 col-12">
+        <b-card header="Your details" header-bg-variant="light">
+          <b-row class="">
+            <b-col class="col-3">
+              Access Level:
+            </b-col>
+            <b-col class="col-9">
+              [[userAccessLevel]]
+            </b-col>
+            <b-col class="col-3">
+              Name:
+            </b-col>
+            <b-col class="col-9">
+              [[userFirstName]] [[userLastName]]
+            </b-col>
+            <b-col class="col-3">
+              Login Code:
+            </b-col>
+            <b-col class="col-9">
+              [[userLoginCode]]
+            </b-col>
+
+          </b-row>
+        </b-card>
+      </b-col>
+
+    </b-row>
+
+  </b-container>
+{% endblock page %}

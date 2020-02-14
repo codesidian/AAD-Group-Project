@@ -6,9 +6,14 @@
     <b-row class="my-3">
       <b-col class="mb-lg-0 mb-3 col-lg-7 col-12">
         <b-card header="Low Stock Products" header-bg-variant="light">
+        <template v-if="lowStockProducts.length > 0">
           <div class="mb-3" v-for="product in lowStockProducts">
-            <h6>[[ product.name ]]:</h6><b-progress show-progress :value="product.quantity" variant="warning"></b-progress>
+            <h6>[[ product.name ]]:</h6> <b-progress show-progress :value="product.quantity" variant="warning"></b-progress>
           </div>
+        </template>
+        <template v-else>
+        All products are in stock.
+        </template>
         </b-card>
       </b-col>
       <b-col>
