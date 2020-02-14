@@ -269,13 +269,11 @@ def modifyProduct(request: HttpRequest):
     if quantity:
         item.quantity = int(quantity)
     if warning_quantity:
-        item.warning_quantity = int(warning_quantity[0])
-    if is_chemical:
-        item.is_chemical = is_chemical
+        item.warning_quantity = int(warning_quantity)
+    item.is_chemical = is_chemical
     if pack_size:
         item.pack_size = int(pack_size)
-    if for_sale:
-        item.for_sale = for_sale
+    item.for_sale = for_sale
     
     item.save()
     messages.success(request, 'Product: '+name+' changed successfully.')

@@ -112,9 +112,9 @@
         <b-form-input v-bind:id="'prodPrice'+selectedEditProductId" name="prodPrice" size="sm" placeholder="Price" type="number"></b-form-input>
         <b-form-input v-bind:id="'prodQty'+selectedEditProductId" name="prodQty" size="sm" placeholder="Quantity" type="number"></b-form-input>
         <b-form-input v-bind:id="'prodQtyWarn'+selectedEditProductId" name="prodQtyWarn" size="sm" placeholder="Warn Quantity" type="number"></b-form-input>
-        <b-form-checkbox v-bind:id="'prodIsChemical'+selectedEditProductId" name="prodIsChemical" value="1">Is Chemical</b-form-checkbox>
         <b-form-input v-bind:id="'prodPackSize'+selectedEditProductId" name="prodPackSize" size="sm" placeholder="Pack Size" type="number"></b-form-input>
-        <b-form-checkbox v-bind:id="'prodForSale'+selectedEditProductId" name="prodForSale" value="1">For Sale</b-form-checkbox>
+        <b-form-checkbox v-model="selectedEditProductIsChemical" v-bind:id="'prodIsChemical'+selectedEditProductId" name="prodIsChemical" switch checked>Is Chemical</b-form-checkbox>
+        <b-form-checkbox v-model="selectedEditProductForSale" v-bind:id="'prodForSale'+selectedEditProductId" name="prodForSale"  switch checked>For Sale</b-form-checkbox>
       </div>
       <b-button type="submit" size="sm" variant="success" @click="ok()">
         Save
@@ -212,4 +212,6 @@
       <b-button variant="warning" @click="ok()">OK</b-button>
     </template>
   </b-modal>
+
+
 {% endblock page %}
