@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ay_mq2r*f29_ce!6&2wzu+rt0j)50k!d2h2ly6tkd%hj2@i26$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 LOGIN_URL = '/'
 AUTH_USER_MODEL = 'api.User'
 ALLOWED_HOSTS = ['*']
@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'spicystores.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join('/data', 'db.sqlite3'),
     }
 }
 

@@ -1,9 +1,10 @@
 #!/bin/sh
-if which npm > /dev/null 2> /dev/null; then
-    pushd CustomerSite
+if which npm > /dev/null 2> /dev/null
+then
+    cd CustomerSite
     npm i
     npm run build
-    popd
+    cd ..
 else
     echo "Failed to find npm, please install nodejs on your system"
 fi

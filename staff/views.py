@@ -31,7 +31,7 @@ def products(HttpRequest):
 
 
 @login_required
-def reports(HttpRequest,id=0):
+def reports(HttpRequest, id=0):
     if HttpRequest.method == 'GET':
         filename = HttpRequest.GET.get('filename')
         print(filename)
