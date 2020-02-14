@@ -69,6 +69,7 @@
     crossorigin="anonymous"
   >
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js" integrity="sha256-oE03O+I6Pzff4fiMqwEGHbdfcW7a3GRRxlL+U49L5sA=" crossorigin="anonymous"></script>
   <script>
     axios.defaults.xsrfCookieName = 'csrftoken'
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
@@ -109,10 +110,12 @@
     return vars;
 } 
   </script>
+  {% block head-inner %}
+  {% endblock head-inner %}
 {% endblock head %}
 {% block content %}
   <div id="app">
-    <b-navbar toggleable="lg" type="dark" variant="primary" sticky>
+    <b-navbar id="topNav" toggleable="lg" type="dark" variant="primary" sticky>
       <b-navbar-brand
         :active="isActive('{% url 'staffmodule-home' %}')"
         :disabled="isActive('{% url 'staffmodule-home' %}')"
@@ -340,6 +343,7 @@
         userFirstName: '',
         userLastName: '',
         userLoginCode: '',
+        stockCheckItems: {}
       },
       methods: {
         setNotificationSeen(id) {
@@ -478,6 +482,26 @@
             .catch(err => {
               // An error occurred
             })
+        },
+
+        submitStockCheck() {
+          const csrfToken = Cookies.get('csrftoken');
+          if (csrfToken == undefined) {
+              throw Error("No CSRF token");
+          }
+
+          for (let [key, value] of Object.entries(this.stockCheckItems)) {
+            let body = {"quantity": value};
+            
+            fetch('/api/items/' + key + '/', {
+                method:"PATCH",
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {'X-CSRFToken': csrfToken, "Content-Type": "application/json"},
+                body: JSON.stringify(body)
+            }).then(x => {if (x.status != 200) console.log("Error patching item");});
+          }
         }
       },
       beforeCreate: function() {

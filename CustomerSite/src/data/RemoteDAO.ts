@@ -14,7 +14,7 @@ export default class RemoteDAO implements Types.StoresDAO {
     }
 
     async getItem(itemCode: string): Promise<Types.Item> {
-        const response = await fetch(`http://localhost:8000/api/items/${itemCode}/`, {
+        const response = await fetch(`/api/items/${itemCode}/`, {
             method: "GET",
             mode: 'cors',
             cache: 'no-cache',
