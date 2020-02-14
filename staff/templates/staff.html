@@ -168,7 +168,7 @@
           >
             Stock Check
           </b-nav-item>
-          <template v-if="userAccessLevel == 'MA'">
+       
           <b-nav-item
             :active="isActive('{% url 'staffmodule-admin' %}')"
             :disabled="isActive('{% url 'staffmodule-admin' %}')"
@@ -176,7 +176,7 @@
           >
             Admin
           </b-nav-item>
-          </template>
+
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
 
@@ -510,12 +510,6 @@
           this.numSalesYesterday = data.length
         })
 
-          axios.get('/api/staff/').then(({ data }) => {
-          this.userAccessLevel = data.access_level;
-          this.userFirstName = data.first_name;
-          this.userLastName = data.last_name;
-          this.userLoginCode = data.login_code;
-        })
       },
       delimiters: ['[[',']]']
     })

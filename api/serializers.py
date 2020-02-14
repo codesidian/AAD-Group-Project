@@ -70,12 +70,3 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             'report_type',
             'created_date'
         )
-class StaffSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Staff
-        fields = (
-            'first_name',
-            'last_name',
-            'login_code',
-            'access_level'
-        )
