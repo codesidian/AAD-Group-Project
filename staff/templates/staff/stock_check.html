@@ -1,0 +1,73 @@
+{% extends "staff.html" %}
+{% load static %}
+{% block title %}{{title}}{% endblock title %}}
+{% block page %}
+  <b-container fluid class="px-0 py-0">
+          <video id="qrVideo" style=" height: 100%; width: 100%;" autoplay></video>
+          <canvas id="qrCanvas" style="display:none;"></canvas>
+          <b-card-text>
+            [[ decodedString ]]
+          </b-card-text>
+  </b-container>
+  <script type="text/javascript">
+    //
+    //
+    // ADAPTED FROM https://github.com/webrtc/samples/blob/gh-pages/src/content/getusermedia/gum/js/main.js
+    //
+    //
+    // Put variables in global scope to make them available to the browser console.
+    const constraints = window.constraints = {
+      audio: false,
+      video: true
+    };
+
+    function handleSuccess(stream) {
+      const video = document.querySelector('#qrVideo');
+      window.stream = stream; // make variable available to browser console
+      video.srcObject = stream;
+      draw()
+    }
+
+    function handleError(error) {
+      if (error.name === 'ConstraintNotSatisfiedError') {
+        const v = constraints.video;
+        errorMsg(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
+      } else if (error.name === 'PermissionDeniedError') {
+        errorMsg('Permissions have not been granted to use your camera and ' +
+          'microphone, you need to allow the page access to your devices in ' +
+          'order for the demo to work.');
+      }
+      errorMsg(`getUserMedia error: ${error.name}`, error);
+    }
+
+    function errorMsg(msg, error) {
+      console.log(msg, error)
+    }
+
+    async function init() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        handleSuccess(stream);
+      } catch (e) {
+        handleError(e);
+      }
+    }
+
+    init()
+
+    function draw() {
+      var canvas = document.querySelector('#qrCanvas')
+      var context = canvas.getContext('2d')
+      var video = document.querySelector('#qrVideo')
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      var data = new Uint8ClampedArray()
+      data = context.getImageData(0, 0, canvas.width, canvas.height).data
+      const code = jsQR(data, canvas.width, canvas.height, { inversionAttempts: 'dontInvert' });
+      if (code) {
+        window.vm.decodedString = code.data
+        var quantity = prompt("Enter quantity for " + window.vm.decodedString)
+      }
+      setTimeout(draw, 10);
+    }
+  </script>
+{% endblock page %}
