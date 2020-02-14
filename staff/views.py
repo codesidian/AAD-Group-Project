@@ -281,10 +281,15 @@ def modifyProduct(request: HttpRequest):
 @login_required
 def profile(HttpRequest):
     account = User.objects.get(id=HttpRequest.user.id)
+    staffProfile = Staff.objects.get(user_id=HttpRequest.user.id)
     context = {'title': 'Profile',
                'user_email': account.email,
                'last_login': account.last_login,
-               'username':account.username}
+               'username':account.username,
+               'userAccessLevel':staffProfile.access_level,
+               'userFirstName':staffProfile.first_name,
+               'userLastName':staffProfile.last_name,
+               'userlogincode':staffProfile.login_code}
     return render(HttpRequest, 'staff/profile.html', context)
 
 @login_required
